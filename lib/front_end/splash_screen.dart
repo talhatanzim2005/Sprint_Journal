@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'homescreen.dart';
+import 'main_dashboard_screen.dart';
 
 /// Multi-phase cinematic splash screen animation:
 ///
@@ -137,7 +137,7 @@ class _OneTimeSplashScreenState extends State<OneTimeSplashScreen>
     Navigator.of(context).pushReplacement(
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) =>
-            const HomeScreen(),
+            const MainDashboardScreen(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
