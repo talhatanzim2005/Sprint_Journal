@@ -256,24 +256,26 @@ class _OneTimeSplashScreenState extends State<OneTimeSplashScreen>
                       (_logoSlideX.value * screenWidth) -
                       (logoSize / 2),
                   top: (screenHeight / 2) - (logoSize / 2),
-                  child: SizedBox(
+                  child: Container(
                     width: logoSize,
                     height: logoSize,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(logoSize * 0.2),
-                      child: Image.asset(
-                        'assest/images/IMG-20260802-WA004.jpg.png',
-                        fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            color: const Color(0xFF2E2E2D),
-                            child: const Icon(
-                              Icons.bolt_rounded,
-                              size: 60,
-                              color: crimsonColor,
+                    child: FittedBox(
+                      fit: BoxFit.contain,
+                      child: Center(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(44), // Adjust to match corner radius
+                          child: SizedBox(
+                            width: 220,
+                            height: 220,
+                            child: Transform.scale(
+                              scale: 1.85, // Zooms in past the outer dark container
+                              child: Image.asset(
+                                'assest/images/IMG-20260802-WA0014.jpg',
+                                fit: BoxFit.cover,
+                              ),
                             ),
-                          );
-                        },
+                          ),
+                        ),
                       ),
                     ),
                   ),
