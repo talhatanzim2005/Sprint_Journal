@@ -2,12 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-enum TimerMode {
-  pomodoro,
-  shortBreak,
-  longBreak,
-}
-
 class TimerScreen extends StatefulWidget {
   const TimerScreen({super.key});
 
@@ -19,20 +13,11 @@ class TimerScreen extends StatefulWidget {
 
 class _TimerScreenState extends State<TimerScreen> {
 
-  TimerMode currentMode = TimerMode.pomodoro;
-
   int remainingSeconds = 25 * 60;
 
   Timer? timer;
 
   bool isRunning = false;
-
-  // List of timer modes
-  final List<TimerMode> modes = [
-    TimerMode.pomodoro,
-    TimerMode.shortBreak,
-    TimerMode.longBreak,
-  ];
 
 
   @override
@@ -41,34 +26,6 @@ class _TimerScreenState extends State<TimerScreen> {
 
     // Initial timer value
     remainingSeconds = 25 * 60;
-  }
-
-
-  // Get duration
-  int getDuration(TimerMode mode) {
-
-    if (mode == TimerMode.pomodoro) {
-      return 25 * 60;
-    }
-
-    if (mode == TimerMode.shortBreak) {
-      return 5 * 60;
-    }
-
-    return 15 * 60;
-  }
-
-
-  // Change timer mode
-  void changeMode(TimerMode mode) {
-
-    timer?.cancel();
-
-    setState(() {
-      currentMode = mode;
-      remainingSeconds = getDuration(mode);
-      isRunning = false;
-    });
   }
 
 
@@ -123,7 +80,7 @@ class _TimerScreenState extends State<TimerScreen> {
     timer?.cancel();
 
     setState(() {
-      remainingSeconds = getDuration(currentMode);
+      remainingSeconds = 25 * 60;
       isRunning = false;
     });
   }
@@ -141,21 +98,6 @@ class _TimerScreenState extends State<TimerScreen> {
   }
 
 
-  // Timer description
-  String get modeText {
-
-    if (currentMode == TimerMode.pomodoro) {
-      return "Focus Time";
-    }
-
-    if (currentMode == TimerMode.shortBreak) {
-      return "Short Break";
-    }
-
-    return "Long Break";
-  }
-
-
   @override
   void dispose() {
 
@@ -168,204 +110,112 @@ class _TimerScreenState extends State<TimerScreen> {
   @override
   Widget build(BuildContext context) {
 
+    double progress = remainingSeconds / (25 * 60);
+
     return Container(
 
       color: const Color(0xFF121212),
 
-      child: Padding(
+      child: Column(
 
-        padding: const EdgeInsets.all(20),
+        children: [
 
-        child: Column(
+          const SizedBox(height: 40),
 
-          mainAxisAlignment: MainAxisAlignment.center,
+          Expanded(
 
-          crossAxisAlignment: CrossAxisAlignment.center,
+            child: Stack(
 
-          children: [
-
-            // -------------------------
-            // TIMER MODES
-            // -------------------------
-
-            Row(
-
-              mainAxisAlignment: MainAxisAlignment.center,
+              alignment: Alignment.center,
 
               children: [
 
-                for (TimerMode mode in modes)
+                SizedBox(
 
-                  Padding(
+                  width: 300,
 
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 4,
+                  height: 300,
+
+                  child: CircularProgressIndicator(
+
+                    backgroundColor: Colors.grey.shade800,
+
+                    color: const Color(0xFFB71C1C),
+
+                    value: progress,
+
+                    strokeWidth: 6,
+                  ),
+                ),
+
+                Column(
+
+                  mainAxisSize: MainAxisSize.min,
+
+                  children: [
+
+                    Text(
+
+                      formattedTime,
+
+                      style: const TextStyle(
+
+                        color: Color(0xFFFFF4E0),
+
+                        fontSize: 60,
+
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
 
-                    child: _buildModeButton(mode),
-                  ),
+                    const SizedBox(height: 10),
+
+                    const Text(
+
+                      "Focus Time",
+
+                      style: TextStyle(
+
+                        color: Colors.white70,
+
+                        fontSize: 20,
+
+                        fontWeight: FontWeight.normal,
+
+                        letterSpacing: 1,
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
+          ),
 
+          Padding(
 
-            const SizedBox(height: 60),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 40),
 
-
-            // -------------------------
-            // TIMER
-            // -------------------------
-
-            Center(
-
-              child: Text(
-
-                formattedTime,
-
-                style: const TextStyle(
-
-                  color: Color(0xFFFFF4E0),
-
-                  fontSize: 80,
-
-                  fontWeight: FontWeight.bold,
-
-                  letterSpacing: 2,
-                ),
-              ),
-            ),
-
-
-            const SizedBox(height: 10),
-
-
-            Text(
-
-              modeText,
-
-              style: const TextStyle(
-
-                color: Colors.white70,
-
-                fontSize: 20,
-
-                fontWeight: FontWeight.normal,
-
-                letterSpacing: 1,
-              ),
-            ),
-
-
-            const SizedBox(height: 50),
-
-
-            // -------------------------
-            // CONTROL BUTTONS
-            // -------------------------
-
-            Row(
+            child: Row(
 
               mainAxisAlignment: MainAxisAlignment.center,
 
               children: [
 
                 _buildControlButton(
-                  Icons.refresh,
+                  isRunning ? Icons.pause : Icons.play_arrow,
+                  isRunning ? pauseTimer : startTimer,
+                ),
+
+                const SizedBox(width: 20),
+
+                _buildControlButton(
+                  Icons.stop,
                   resetTimer,
-                ),
-
-                const SizedBox(width: 20),
-
-                _buildControlButton(
-                  Icons.play_arrow,
-                  startTimer,
-                ),
-
-                const SizedBox(width: 20),
-
-                _buildControlButton(
-                  Icons.pause,
-                  pauseTimer,
                 ),
               ],
             ),
-          ],
-        ),
-      ),
-    );
-  }
-
-
-  // -------------------------
-  // MODE BUTTON
-  // -------------------------
-
-  Widget _buildModeButton(TimerMode mode) {
-
-    bool selected = currentMode == mode;
-
-    String text = "";
-
-    if (mode == TimerMode.pomodoro) {
-      text = "pomodoro";
-    }
-
-    if (mode == TimerMode.shortBreak) {
-      text = "short break";
-    }
-
-    if (mode == TimerMode.longBreak) {
-      text = "long break";
-    }
-
-
-    return GestureDetector(
-
-      onTap: () {
-        changeMode(mode);
-      },
-
-      child: AnimatedContainer(
-
-        duration: const Duration(milliseconds: 300),
-
-        padding: const EdgeInsets.symmetric(
-          horizontal: 15,
-          vertical: 9,
-        ),
-
-        decoration: BoxDecoration(
-
-          color: Colors.transparent,
-
-          border: Border.all(
-
-            color: selected
-                ? Colors.red
-                : Colors.grey,
-
-            width: selected ? 2 : 1,
           ),
-
-          borderRadius: BorderRadius.circular(20),
-        ),
-
-        child: Text(
-
-          text,
-
-          style: TextStyle(
-
-            color: Colors.white,
-
-            fontSize: 15,
-
-            fontWeight: selected
-                ? FontWeight.bold
-                : FontWeight.normal,
-
-            letterSpacing: 0.5,
-          ),
-        ),
+        ],
       ),
     );
   }
