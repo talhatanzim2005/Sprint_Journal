@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_nav_bar.dart';
 import 'home_screen.dart';
-import 'progress_tracker_screen.dart';
+import 'progress_tracker/progress_tracker_screen.dart';
 import 'journal_screen.dart';
 import 'timer_screen.dart';
 import 'calendar_screen.dart';
+import 'profile_screen.dart';
 
 /// Stateful shell that hosts the four main views via [IndexedStack],
 /// a shared [CustomAppBar], and a [CustomNavBar].
@@ -39,12 +40,10 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
   }
 
   void _openMenu() {
-    // Placeholder — drawer/menu will be wired here later.
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Menu coming soon'),
-        duration: Duration(seconds: 1),
-        backgroundColor: Color(0xFF252524),
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ProfileScreen(),
       ),
     );
   }
