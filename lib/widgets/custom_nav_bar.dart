@@ -1,12 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Bottom navigation bar with 4 tabs evenly distributed.
-///
-/// Tab Index → Icon:
-///   0 → Home
-///   1 → Progress / Analytics
-///   2 → Journal Book
-///   3 → Timer
 class CustomNavBar extends StatelessWidget {
   final int currentIndex;
   final ValueChanged<int> onTabSelected;
@@ -17,7 +10,6 @@ class CustomNavBar extends StatelessWidget {
     required this.onTabSelected,
   });
 
-  // ── Color tokens ──
   static const Color _bgColor = Color(0xFF1B1B1A);
   static const Color _activeColor = Color(0xFFCD0033);
   static const Color _inactiveColor = Color(0xFF8A8A85);
@@ -38,15 +30,10 @@ class CustomNavBar extends StatelessWidget {
       decoration: BoxDecoration(
         color: _bgColor,
         border: Border(
-          top: BorderSide(
-            color: _inactiveColor.withValues(alpha: 0.15),
-          ),
+          top: BorderSide(color: _inactiveColor.withValues(alpha: 0.15)),
         ),
       ),
-      padding: EdgeInsets.only(
-        top: 8,
-        bottom: bottomPadding + 8,
-      ),
+      padding: EdgeInsets.only(top: 8, bottom: bottomPadding + 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: List.generate(_items.length, (index) {
@@ -69,7 +56,6 @@ class _NavItem {
   const _NavItem({required this.icon, required this.label});
 }
 
-/// Individual nav tab with animated icon + label.
 class _NavTabButton extends StatelessWidget {
   final _NavItem item;
   final bool isActive;
@@ -83,8 +69,9 @@ class _NavTabButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color =
-        isActive ? CustomNavBar._activeColor : CustomNavBar._inactiveColor;
+    final color = isActive
+        ? CustomNavBar._activeColor
+        : CustomNavBar._inactiveColor;
 
     return GestureDetector(
       onTap: onTap,
@@ -94,7 +81,6 @@ class _NavTabButton extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Animated icon scale
             AnimatedScale(
               scale: isActive ? 1.15 : 1.0,
               duration: const Duration(milliseconds: 200),
@@ -102,7 +88,7 @@ class _NavTabButton extends StatelessWidget {
               child: Icon(item.icon, color: color, size: 26),
             ),
             const SizedBox(height: 4),
-            // Label
+
             AnimatedDefaultTextStyle(
               duration: const Duration(milliseconds: 200),
               style: TextStyle(
@@ -114,7 +100,7 @@ class _NavTabButton extends StatelessWidget {
               child: Text(item.label),
             ),
             const SizedBox(height: 4),
-            // Active indicator dot
+
             AnimatedContainer(
               duration: const Duration(milliseconds: 250),
               curve: Curves.easeOut,

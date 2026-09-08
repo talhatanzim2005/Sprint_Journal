@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'front_end/splash_screen.dart';
 
 void main() {
@@ -12,7 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: OneTimeSplashScreen(), // App forces splash initialization first
+      home: OneTimeSplashScreen(),
     );
   }
 }

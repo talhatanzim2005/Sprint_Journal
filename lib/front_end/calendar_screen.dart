@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'calendar/calendar_item_model.dart';
 import 'calendar/calendar_view.dart';
 import 'calendar/upcoming_tasks_view.dart';
 
-/// Full calendar screen view.
-///
-/// Features:
-/// - 40% height allocation for top Table Calendar.
-/// - 60% height allocation for bottom Timeline & Event view.
-/// - Bottom-right FAB offering "Upcoming Event" or "Create Task".
-/// - Complete CRUD (Add, Edit, Delete) for items with Title, Description, and Start:End time.
 class CalendarScreen extends StatefulWidget {
   const CalendarScreen({super.key});
 
@@ -25,9 +19,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   DateTime _focusedDay = DateTime.now();
   DateTime _selectedDay = DateTime.now();
-  String? _selectedItemId = '3'; // Default selected item matching sample data
+  String? _selectedItemId = '3';
 
-  // In-memory store for events and tasks grouped by date key "YYYY-MM-DD"
   final Map<String, List<CalendarItem>> _itemsMap = {};
 
   @override
@@ -68,7 +61,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
         startTime: const TimeOfDay(hour: 18, minute: 0),
         endTime: const TimeOfDay(hour: 19, minute: 0),
         date: DateTime.now(),
-        isEvent: true, // Highlighted event card matching screenshot
+        isEvent: true,
       ),
       CalendarItem(
         id: '4',
@@ -103,7 +96,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
         _itemsMap[key] = [];
       }
       _itemsMap[key]!.add(item);
-      // Sort items by start time
+
       _itemsMap[key]!.sort((a, b) {
         final aMinutes = a.startTime.hour * 60 + a.startTime.minute;
         final bMinutes = b.startTime.hour * 60 + b.startTime.minute;
@@ -171,7 +164,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
         builder: (context, constraints) {
           return Column(
             children: [
-              // Top 40% height for Table Calendar
               SizedBox(
                 height: constraints.maxHeight * 0.40,
                 child: Padding(
@@ -192,7 +184,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 ),
               ),
 
-              // Bottom 60% height for Timeline / Upcoming Tasks
               SizedBox(
                 height: constraints.maxHeight * 0.60,
                 child: UpcomingTasksView(
@@ -204,7 +195,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       _selectedItemId = item.id;
                     });
                   },
-                  onEditItem: (item) => _showItemFormModal(context, existingItem: item),
+                  onEditItem: (item) =>
+                      _showItemFormModal(context, existingItem: item),
                   onDeleteItem: _deleteItem,
                 ),
               ),
@@ -213,34 +205,29 @@ class _CalendarScreenState extends State<CalendarScreen> {
         },
       ),
 
-      // Bottom Right Floating Action Button
       floatingActionButton: FloatingActionButton(
         backgroundColor: _highlightColor,
         elevation: 6,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         onPressed: () => _showItemFormModal(context),
-        child: const Icon(
-          Icons.add_rounded,
-          color: Colors.white,
-          size: 32,
-        ),
+        child: const Icon(Icons.add_rounded, color: Colors.white, size: 32),
       ),
     );
   }
 
-  /// Opens full form modal for Adding or Editing an Event
-  void _showItemFormModal(
-    BuildContext context, {
-    CalendarItem? existingItem,
-  }) {
+  void _showItemFormModal(BuildContext context, {CalendarItem? existingItem}) {
     final isEditing = existingItem != null;
-    final titleController = TextEditingController(text: existingItem?.title ?? '');
-    final descController = TextEditingController(text: existingItem?.description ?? '');
+    final titleController = TextEditingController(
+      text: existingItem?.title ?? '',
+    );
+    final descController = TextEditingController(
+      text: existingItem?.description ?? '',
+    );
 
-    TimeOfDay startTime = existingItem?.startTime ?? const TimeOfDay(hour: 9, minute: 0);
-    TimeOfDay endTime = existingItem?.endTime ?? const TimeOfDay(hour: 10, minute: 0);
+    TimeOfDay startTime =
+        existingItem?.startTime ?? const TimeOfDay(hour: 9, minute: 0);
+    TimeOfDay endTime =
+        existingItem?.endTime ?? const TimeOfDay(hour: 10, minute: 0);
 
     showModalBottomSheet(
       context: context,
@@ -284,7 +271,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   ),
                   const SizedBox(height: 20),
 
-                  // Parameter 1: Title Input
                   TextField(
                     controller: titleController,
                     style: const TextStyle(color: _fontColor),
@@ -301,7 +287,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   ),
                   const SizedBox(height: 14),
 
-                  // Parameter 2: Description Input
                   TextField(
                     controller: descController,
                     style: const TextStyle(color: _fontColor),
@@ -319,10 +304,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   ),
                   const SizedBox(height: 16),
 
-                  // Parameter 3: Start Time & End Time as text inputs
                   Row(
                     children: [
-                      // Start Time Input
                       Expanded(
                         child: _TimeInputField(
                           label: 'Start Time',
@@ -336,7 +319,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       ),
                       const SizedBox(width: 12),
 
-                      // End Time Input
                       Expanded(
                         child: _TimeInputField(
                           label: 'End Time',
@@ -352,7 +334,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   ),
                   const SizedBox(height: 24),
 
-                  // Save Action Button
                   SizedBox(
                     width: double.infinity,
                     height: 50,
@@ -377,7 +358,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
                           _editItem(updated);
                         } else {
                           final newItem = CalendarItem(
-                            id: DateTime.now().millisecondsSinceEpoch.toString(),
+                            id: DateTime.now().millisecondsSinceEpoch
+                                .toString(),
                             title: title,
                             description: descController.text.trim(),
                             startTime: startTime,
@@ -410,7 +392,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
   }
 }
 
-/// A simple text-based time input field (HH : MM) — no clock dial.
 class _TimeInputField extends StatefulWidget {
   final String label;
   final TimeOfDay time;
@@ -464,10 +445,9 @@ class _TimeInputFieldState extends State<_TimeInputField> {
   void _emitChange() {
     final hour = int.tryParse(_hourController.text) ?? 0;
     final minute = int.tryParse(_minuteController.text) ?? 0;
-    widget.onChanged(TimeOfDay(
-      hour: hour.clamp(0, 23),
-      minute: minute.clamp(0, 59),
-    ));
+    widget.onChanged(
+      TimeOfDay(hour: hour.clamp(0, 23), minute: minute.clamp(0, 59)),
+    );
   }
 
   @override
@@ -483,15 +463,11 @@ class _TimeInputFieldState extends State<_TimeInputField> {
         children: [
           Text(
             widget.label,
-            style: TextStyle(
-              color: _fontColor.withOpacity(0.6),
-              fontSize: 12,
-            ),
+            style: TextStyle(color: _fontColor.withOpacity(0.6), fontSize: 12),
           ),
           const SizedBox(height: 6),
           Row(
             children: [
-              // Hour input
               SizedBox(
                 width: 36,
                 child: TextField(
@@ -509,7 +485,9 @@ class _TimeInputFieldState extends State<_TimeInputField> {
                     isDense: true,
                     contentPadding: const EdgeInsets.symmetric(vertical: 6),
                     enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: _fontColor.withOpacity(0.2)),
+                      borderSide: BorderSide(
+                        color: _fontColor.withOpacity(0.2),
+                      ),
                     ),
                     focusedBorder: const UnderlineInputBorder(
                       borderSide: BorderSide(color: _highlightColor, width: 2),
@@ -529,7 +507,7 @@ class _TimeInputFieldState extends State<_TimeInputField> {
                   ),
                 ),
               ),
-              // Minute input
+
               SizedBox(
                 width: 36,
                 child: TextField(
@@ -547,7 +525,9 @@ class _TimeInputFieldState extends State<_TimeInputField> {
                     isDense: true,
                     contentPadding: const EdgeInsets.symmetric(vertical: 6),
                     enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: _fontColor.withOpacity(0.2)),
+                      borderSide: BorderSide(
+                        color: _fontColor.withOpacity(0.2),
+                      ),
                     ),
                     focusedBorder: const UnderlineInputBorder(
                       borderSide: BorderSide(color: _highlightColor, width: 2),

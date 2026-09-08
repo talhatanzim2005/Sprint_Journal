@@ -26,9 +26,6 @@ class ProgressSummary extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-
-        // ---------------- TOTAL HABITS ----------------
-
         Expanded(
           child: GestureDetector(
             onTap: onHabitsTap,
@@ -43,8 +40,6 @@ class ProgressSummary extends StatelessWidget {
 
         const SizedBox(width: 10),
 
-        // ---------------- COMPLETIONS ----------------
-
         Expanded(
           child: GestureDetector(
             onTap: onCompletionsTap,
@@ -58,8 +53,6 @@ class ProgressSummary extends StatelessWidget {
         ),
 
         const SizedBox(width: 10),
-
-        // ---------------- BEST STREAK ----------------
 
         Expanded(
           child: GestureDetector(
@@ -76,13 +69,7 @@ class ProgressSummary extends StatelessWidget {
     );
   }
 
-  // ---------------- SUMMARY CARD ----------------
-
-  Widget progressCard(
-      String title,
-      String number,
-      IconData icon,
-      ) {
+  Widget progressCard(String title, String number, IconData icon) {
     return Container(
       height: 120,
 
@@ -94,16 +81,10 @@ class ProgressSummary extends StatelessWidget {
       ),
 
       child: Column(
-        crossAxisAlignment:
-        CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
 
         children: [
-
-          Icon(
-            icon,
-            color: redColor,
-            size: 25,
-          ),
+          Icon(icon, color: redColor, size: 25),
 
           const SizedBox(height: 8),
 
@@ -118,10 +99,7 @@ class ProgressSummary extends StatelessWidget {
 
           Text(
             title,
-            style: const TextStyle(
-              color: Colors.white70,
-              fontSize: 12,
-            ),
+            style: const TextStyle(color: Colors.white70, fontSize: 12),
           ),
         ],
       ),

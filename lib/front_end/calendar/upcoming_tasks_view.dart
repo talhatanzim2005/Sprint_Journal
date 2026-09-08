@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'calendar_item_model.dart';
 
-/// Bottom component occupying ~60% of the body height.
-/// Displays a timeline list of tasks and upcoming events for the selected date.
 class UpcomingTasksView extends StatefulWidget {
   final DateTime selectedDate;
   final List<CalendarItem> items;
@@ -31,7 +30,7 @@ class _UpcomingTasksViewState extends State<UpcomingTasksView> {
   static const Color _highlightColor = Color(0xFFCD0033);
 
   final ScrollController _scrollController = ScrollController();
-  double _scrollThumbPosition = 0.0; // 0.0 to 1.0 proportion
+  double _scrollThumbPosition = 0.0;
 
   @override
   void initState() {
@@ -54,7 +53,10 @@ class _UpcomingTasksViewState extends State<UpcomingTasksView> {
       return;
     }
     setState(() {
-      _scrollThumbPosition = (_scrollController.offset / maxExtent).clamp(0.0, 1.0);
+      _scrollThumbPosition = (_scrollController.offset / maxExtent).clamp(
+        0.0,
+        1.0,
+      );
     });
   }
 
@@ -68,8 +70,18 @@ class _UpcomingTasksViewState extends State<UpcomingTasksView> {
   String get _headerTitle {
     if (_isToday) return 'Today';
     final months = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
     ];
     return '${widget.selectedDate.day} ${months[widget.selectedDate.month - 1]}';
   }
@@ -82,7 +94,6 @@ class _UpcomingTasksViewState extends State<UpcomingTasksView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Drag handle bar
           Center(
             child: Container(
               margin: const EdgeInsets.only(top: 8.0, bottom: 12.0),
@@ -95,7 +106,6 @@ class _UpcomingTasksViewState extends State<UpcomingTasksView> {
             ),
           ),
 
-          // Header row: Date title + Event count
           Padding(
             padding: const EdgeInsets.only(bottom: 12.0, right: 16.0),
             child: Row(
@@ -121,7 +131,6 @@ class _UpcomingTasksViewState extends State<UpcomingTasksView> {
             ),
           ),
 
-          // Timeline list + draggable scroll thumb on the right
           Expanded(
             child: widget.items.isEmpty
                 ? _buildEmptyState()
@@ -129,11 +138,10 @@ class _UpcomingTasksViewState extends State<UpcomingTasksView> {
                     builder: (context, constraints) {
                       final trackHeight = constraints.maxHeight;
                       const thumbHeight = 48.0;
-                      final maxThumbOffset = trackHeight - thumbHeight - 16; // 16 = top+bottom pad
+                      final maxThumbOffset = trackHeight - thumbHeight - 16;
 
                       return Stack(
                         children: [
-                          // Main scrollable timeline list
                           Padding(
                             padding: const EdgeInsets.only(right: 32.0),
                             child: ListView.builder(
@@ -159,20 +167,29 @@ class _UpcomingTasksViewState extends State<UpcomingTasksView> {
                             ),
                           ),
 
-                          // Right-side draggable scroll thumb
                           Positioned(
                             right: 2,
-                            top: 8 + (_scrollThumbPosition * maxThumbOffset).clamp(0.0, maxThumbOffset),
+                            top:
+                                8 +
+                                (_scrollThumbPosition * maxThumbOffset).clamp(
+                                  0.0,
+                                  maxThumbOffset,
+                                ),
                             child: GestureDetector(
                               onVerticalDragUpdate: (details) {
                                 if (!_scrollController.hasClients) return;
-                                final maxExtent = _scrollController.position.maxScrollExtent;
+                                final maxExtent =
+                                    _scrollController.position.maxScrollExtent;
                                 if (maxExtent <= 0) return;
 
-                                // Convert drag delta to scroll delta
-                                final dragProportion = details.delta.dy / maxThumbOffset;
-                                final newOffset = _scrollController.offset + (dragProportion * maxExtent);
-                                _scrollController.jumpTo(newOffset.clamp(0.0, maxExtent));
+                                final dragProportion =
+                                    details.delta.dy / maxThumbOffset;
+                                final newOffset =
+                                    _scrollController.offset +
+                                    (dragProportion * maxExtent);
+                                _scrollController.jumpTo(
+                                  newOffset.clamp(0.0, maxExtent),
+                                );
                               },
                               child: Container(
                                 width: 22,
@@ -195,19 +212,27 @@ class _UpcomingTasksViewState extends State<UpcomingTasksView> {
                                       Container(
                                         width: 10,
                                         height: 2,
-                                        margin: const EdgeInsets.only(bottom: 3),
+                                        margin: const EdgeInsets.only(
+                                          bottom: 3,
+                                        ),
                                         decoration: BoxDecoration(
                                           color: Colors.white.withOpacity(0.7),
-                                          borderRadius: BorderRadius.circular(1),
+                                          borderRadius: BorderRadius.circular(
+                                            1,
+                                          ),
                                         ),
                                       ),
                                       Container(
                                         width: 10,
                                         height: 2,
-                                        margin: const EdgeInsets.only(bottom: 3),
+                                        margin: const EdgeInsets.only(
+                                          bottom: 3,
+                                        ),
                                         decoration: BoxDecoration(
                                           color: Colors.white.withOpacity(0.7),
-                                          borderRadius: BorderRadius.circular(1),
+                                          borderRadius: BorderRadius.circular(
+                                            1,
+                                          ),
                                         ),
                                       ),
                                       Container(
@@ -215,7 +240,9 @@ class _UpcomingTasksViewState extends State<UpcomingTasksView> {
                                         height: 2,
                                         decoration: BoxDecoration(
                                           color: Colors.white.withOpacity(0.7),
-                                          borderRadius: BorderRadius.circular(1),
+                                          borderRadius: BorderRadius.circular(
+                                            1,
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -256,10 +283,7 @@ class _UpcomingTasksViewState extends State<UpcomingTasksView> {
           const SizedBox(height: 4),
           Text(
             'Tap the + button to add one',
-            style: TextStyle(
-              color: _fontColor.withOpacity(0.3),
-              fontSize: 13,
-            ),
+            style: TextStyle(color: _fontColor.withOpacity(0.3), fontSize: 13),
           ),
         ],
       ),
@@ -267,7 +291,6 @@ class _UpcomingTasksViewState extends State<UpcomingTasksView> {
   }
 }
 
-/// Individual timeline row item: hover highlight + double-click/long-press → edit.
 class TimelineRowItem extends StatefulWidget {
   final CalendarItem item;
   final bool isFirst;
@@ -306,7 +329,6 @@ class _TimelineRowItemState extends State<TimelineRowItem> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Time Column (Start : End)
           SizedBox(
             width: 54,
             child: Column(
@@ -335,7 +357,6 @@ class _TimelineRowItemState extends State<TimelineRowItem> {
             ),
           ),
 
-          // Vertical Line & Dot Node
           SizedBox(
             width: 24,
             child: Stack(
@@ -379,7 +400,6 @@ class _TimelineRowItemState extends State<TimelineRowItem> {
 
           const SizedBox(width: 8),
 
-          // Card: hover highlight, double-click/long-press → edit
           Expanded(
             child: MouseRegion(
               cursor: SystemMouseCursors.click,
@@ -401,17 +421,17 @@ class _TimelineRowItemState extends State<TimelineRowItem> {
                     boxShadow: isHighlighted
                         ? [
                             BoxShadow(
-                              color: TimelineRowItem._highlightColor.withOpacity(0.45),
+                              color: TimelineRowItem._highlightColor
+                                  .withOpacity(0.45),
                               blurRadius: 12,
                               offset: const Offset(0, 4),
-                            )
+                            ),
                           ]
                         : null,
                   ),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // Title & Description
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -420,7 +440,9 @@ class _TimelineRowItemState extends State<TimelineRowItem> {
                             Text(
                               widget.item.title,
                               style: TextStyle(
-                                color: isHighlighted ? Colors.white : TimelineRowItem._fontColor,
+                                color: isHighlighted
+                                    ? Colors.white
+                                    : TimelineRowItem._fontColor,
                                 fontSize: 15,
                                 fontWeight: FontWeight.w700,
                               ),
@@ -432,7 +454,9 @@ class _TimelineRowItemState extends State<TimelineRowItem> {
                                 style: TextStyle(
                                   color: isHighlighted
                                       ? Colors.white.withOpacity(0.85)
-                                      : TimelineRowItem._fontColor.withOpacity(0.6),
+                                      : TimelineRowItem._fontColor.withOpacity(
+                                          0.6,
+                                        ),
                                   fontSize: 13,
                                   fontWeight: FontWeight.w400,
                                 ),
@@ -442,7 +466,6 @@ class _TimelineRowItemState extends State<TimelineRowItem> {
                         ),
                       ),
 
-                      // Actions Popup Menu (Edit & Delete)
                       PopupMenuButton<String>(
                         icon: Icon(
                           Icons.more_vert_rounded,
@@ -467,9 +490,18 @@ class _TimelineRowItemState extends State<TimelineRowItem> {
                             value: 'edit',
                             child: Row(
                               children: [
-                                Icon(Icons.edit_rounded, color: TimelineRowItem._fontColor, size: 18),
+                                Icon(
+                                  Icons.edit_rounded,
+                                  color: TimelineRowItem._fontColor,
+                                  size: 18,
+                                ),
                                 SizedBox(width: 10),
-                                Text('Edit', style: TextStyle(color: TimelineRowItem._fontColor)),
+                                Text(
+                                  'Edit',
+                                  style: TextStyle(
+                                    color: TimelineRowItem._fontColor,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -477,11 +509,18 @@ class _TimelineRowItemState extends State<TimelineRowItem> {
                             value: 'delete',
                             child: Row(
                               children: [
-                                Icon(Icons.delete_outline_rounded,
-                                    color: TimelineRowItem._highlightColor, size: 18),
+                                Icon(
+                                  Icons.delete_outline_rounded,
+                                  color: TimelineRowItem._highlightColor,
+                                  size: 18,
+                                ),
                                 SizedBox(width: 10),
-                                Text('Delete',
-                                    style: TextStyle(color: TimelineRowItem._highlightColor)),
+                                Text(
+                                  'Delete',
+                                  style: TextStyle(
+                                    color: TimelineRowItem._highlightColor,
+                                  ),
+                                ),
                               ],
                             ),
                           ),

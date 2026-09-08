@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Log feed and note entries.
-///
-/// No Scaffold — [MainDashboardScreen] provides the outer shell.
 class JournalScreen extends StatelessWidget {
   const JournalScreen({super.key});
 

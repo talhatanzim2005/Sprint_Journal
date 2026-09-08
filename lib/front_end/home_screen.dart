@@ -41,11 +41,7 @@ class HomeScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(15),
               ),
               child: const Center(
-                child: Icon(
-                  Icons.edit_note,
-                  color: Colors.white30,
-                  size: 60,
-                ),
+                child: Icon(Icons.edit_note, color: Colors.white30, size: 60),
               ),
             ),
             const SizedBox(height: 40),
@@ -82,13 +78,7 @@ class HomeScreen extends StatelessWidget {
         border: Border.all(color: Colors.white30, width: 2),
         borderRadius: BorderRadius.circular(12),
       ),
-      child: Center(
-        child: Icon(
-          icon,
-          color: Colors.white54,
-          size: 30,
-        ),
-      ),
+      child: Center(child: Icon(icon, color: Colors.white54, size: 30)),
     );
   }
 }

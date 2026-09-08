@@ -1,41 +1,23 @@
 import 'package:flutter/material.dart';
 
-// ================================================================
-// COMPLETIONS DIALOG
-// ================================================================
-
-void showCompletionsDialog(
-    BuildContext context,
-    int completed,
-    int total,
-    ) {
+void showCompletionsDialog(BuildContext context, int completed, int total) {
   showDialog(
     context: context,
 
     builder: (dialogContext) {
-
       return AlertDialog(
-        backgroundColor:
-        const Color(0xFF252524),
+        backgroundColor: const Color(0xFF252524),
 
         title: const Text(
           'Completions',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
 
         content: Column(
           mainAxisSize: MainAxisSize.min,
 
           children: [
-
-            const Icon(
-              Icons.done_all,
-              color: Color(0xFFCD0033),
-              size: 50,
-            ),
+            const Icon(Icons.done_all, color: Color(0xFFCD0033), size: 50),
 
             const SizedBox(height: 15),
 
@@ -52,25 +34,20 @@ void showCompletionsDialog(
 
             const Text(
               'Habits completed today',
-              style: TextStyle(
-                color: Colors.white70,
-              ),
+              style: TextStyle(color: Colors.white70),
             ),
 
             const SizedBox(height: 20),
 
             Text(
               'You completed $completed habits today.',
-              style: const TextStyle(
-                color: Colors.white,
-              ),
+              style: const TextStyle(color: Colors.white),
               textAlign: TextAlign.center,
             ),
           ],
         ),
 
         actions: [
-
           TextButton(
             onPressed: () {
               Navigator.pop(dialogContext);
@@ -78,9 +55,7 @@ void showCompletionsDialog(
 
             child: const Text(
               'Close',
-              style: TextStyle(
-                color: Color(0xFFCD0033),
-              ),
+              style: TextStyle(color: Color(0xFFCD0033)),
             ),
           ),
         ],
@@ -89,37 +64,23 @@ void showCompletionsDialog(
   );
 }
 
-// ================================================================
-// STREAK DIALOG
-// ================================================================
-
-void showStreakDialog(
-    BuildContext context,
-    int currentStreak,
-    int bestStreak,
-    ) {
+void showStreakDialog(BuildContext context, int currentStreak, int bestStreak) {
   showDialog(
     context: context,
 
     builder: (dialogContext) {
-
       return AlertDialog(
-        backgroundColor:
-        const Color(0xFF252524),
+        backgroundColor: const Color(0xFF252524),
 
         title: const Text(
           'Streaks',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
 
         content: Column(
           mainAxisSize: MainAxisSize.min,
 
           children: [
-
             const Icon(
               Icons.local_fire_department,
               color: Color(0xFFCD0033),
@@ -139,9 +100,7 @@ void showStreakDialog(
 
             const Text(
               'Current Streak',
-              style: TextStyle(
-                color: Colors.white70,
-              ),
+              style: TextStyle(color: Colors.white70),
             ),
 
             const SizedBox(height: 20),
@@ -155,27 +114,19 @@ void showStreakDialog(
               ),
             ),
 
-            const Text(
-              'Best Streak',
-              style: TextStyle(
-                color: Colors.white70,
-              ),
-            ),
+            const Text('Best Streak', style: TextStyle(color: Colors.white70)),
 
             const SizedBox(height: 15),
 
             const Text(
               'Keep completing your habits every day to build a longer streak.',
-              style: TextStyle(
-                color: Colors.white,
-              ),
+              style: TextStyle(color: Colors.white),
               textAlign: TextAlign.center,
             ),
           ],
         ),
 
         actions: [
-
           TextButton(
             onPressed: () {
               Navigator.pop(dialogContext);
@@ -183,9 +134,7 @@ void showStreakDialog(
 
             child: const Text(
               'Close',
-              style: TextStyle(
-                color: Color(0xFFCD0033),
-              ),
+              style: TextStyle(color: Color(0xFFCD0033)),
             ),
           ),
         ],

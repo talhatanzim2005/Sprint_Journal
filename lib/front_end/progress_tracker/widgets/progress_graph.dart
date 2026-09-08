@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ProgressGraph extends StatelessWidget {
-  const ProgressGraph({
-    super.key,
-    required this.isThirtyDays,
-  });
+  const ProgressGraph({super.key, required this.isThirtyDays});
 
   final bool isThirtyDays;
 
@@ -25,18 +22,12 @@ class ProgressGraph extends StatelessWidget {
 
       child: Column(
         children: [
-
-          // ---------------- GRAPH TITLE ----------------
-
           const Align(
             alignment: Alignment.centerLeft,
 
             child: Text(
               'Completion %',
-              style: TextStyle(
-                color: Colors.white70,
-                fontSize: 12,
-              ),
+              style: TextStyle(color: Colors.white70, fontSize: 12),
             ),
           ),
 
@@ -45,65 +36,41 @@ class ProgressGraph extends StatelessWidget {
           Expanded(
             child: Row(
               children: [
-
-                // ---------------- Y AXIS ----------------
-
                 const Column(
-                  mainAxisAlignment:
-                  MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
                   children: [
-
                     Text(
                       '100%',
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 10,
-                      ),
+                      style: TextStyle(color: Colors.white70, fontSize: 10),
                     ),
 
                     Text(
                       '75%',
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 10,
-                      ),
+                      style: TextStyle(color: Colors.white70, fontSize: 10),
                     ),
 
                     Text(
                       '50%',
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 10,
-                      ),
+                      style: TextStyle(color: Colors.white70, fontSize: 10),
                     ),
 
                     Text(
                       '25%',
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 10,
-                      ),
+                      style: TextStyle(color: Colors.white70, fontSize: 10),
                     ),
 
                     Text(
                       '0%',
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 10,
-                      ),
+                      style: TextStyle(color: Colors.white70, fontSize: 10),
                     ),
                   ],
                 ),
 
                 const SizedBox(width: 10),
 
-                // ---------------- GRAPH ----------------
-
                 Expanded(
-                  child: isThirtyDays
-                      ? _thirtyDayGraph()
-                      : _weekGraph(),
+                  child: isThirtyDays ? _thirtyDayGraph() : _weekGraph(),
                 ),
               ],
             ),
@@ -113,25 +80,16 @@ class ProgressGraph extends StatelessWidget {
     );
   }
 
-  // ==============================================================
-  // THIS WEEK GRAPH
-  // ==============================================================
-
   Widget _weekGraph() {
     return Column(
       children: [
-
         Expanded(
           child: Stack(
             alignment: Alignment.bottomCenter,
 
             children: [
-
-              // ---------------- GUIDE LINES ----------------
-
               Column(
-                mainAxisAlignment:
-                MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
                 children: [
                   graphLine(),
@@ -142,14 +100,10 @@ class ProgressGraph extends StatelessWidget {
                 ],
               ),
 
-              // ---------------- BARS ----------------
-
               Row(
-                crossAxisAlignment:
-                CrossAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
 
-                mainAxisAlignment:
-                MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
 
                 children: [
                   weekBar('Mon', 0.55),
@@ -168,10 +122,6 @@ class ProgressGraph extends StatelessWidget {
     );
   }
 
-  // ==============================================================
-  // LAST 30 DAYS GRAPH
-  // ==============================================================
-
   Widget _thirtyDayGraph() {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -181,18 +131,13 @@ class ProgressGraph extends StatelessWidget {
 
         child: Column(
           children: [
-
             Expanded(
               child: Stack(
                 alignment: Alignment.bottomCenter,
 
                 children: [
-
-                  // ---------------- GUIDE LINES ----------------
-
                   Column(
-                    mainAxisAlignment:
-                    MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
                     children: [
                       graphLine(),
@@ -203,14 +148,10 @@ class ProgressGraph extends StatelessWidget {
                     ],
                   ),
 
-                  // ---------------- 30 BARS ----------------
-
                   Row(
-                    crossAxisAlignment:
-                    CrossAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.end,
 
                     children: [
-
                       dayBar('1', 0.50),
                       dayBar('2', 0.70),
                       dayBar('3', 0.30),
@@ -252,97 +193,57 @@ class ProgressGraph extends StatelessWidget {
     );
   }
 
-  // ==============================================================
-  // GRAPH GUIDE LINE
-  // ==============================================================
-
   Widget graphLine() {
-    return Container(
-      height: 1,
-      width: double.infinity,
-      color: Colors.white24,
-    );
+    return Container(height: 1, width: double.infinity, color: Colors.white24);
   }
 
-  // ==============================================================
-  // 7 DAY BAR
-  // ==============================================================
-
-  Widget weekBar(
-      String day,
-      double height,
-      ) {
+  Widget weekBar(String day, double height) {
     return SizedBox(
       width: 30,
 
       child: Column(
-        mainAxisAlignment:
-        MainAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.end,
 
         children: [
-
           Container(
             width: 22,
             height: 130 * height,
 
             decoration: BoxDecoration(
               color: redColor,
-              borderRadius:
-              BorderRadius.circular(6),
+              borderRadius: BorderRadius.circular(6),
             ),
           ),
 
           const SizedBox(height: 5),
 
-          Text(
-            day,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 10,
-            ),
-          ),
+          Text(day, style: const TextStyle(color: Colors.white, fontSize: 10)),
         ],
       ),
     );
   }
 
-  // ==============================================================
-  // 30 DAY BAR
-  // ==============================================================
-
-  Widget dayBar(
-      String day,
-      double height,
-      ) {
+  Widget dayBar(String day, double height) {
     return SizedBox(
       width: 35,
 
       child: Column(
-        mainAxisAlignment:
-        MainAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.end,
 
         children: [
-
           Container(
             width: 22,
             height: 130 * height,
 
             decoration: BoxDecoration(
               color: redColor,
-              borderRadius:
-              BorderRadius.circular(6),
+              borderRadius: BorderRadius.circular(6),
             ),
           ),
 
           const SizedBox(height: 5),
 
-          Text(
-            day,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 10,
-            ),
-          ),
+          Text(day, style: const TextStyle(color: Colors.white, fontSize: 10)),
         ],
       ),
     );

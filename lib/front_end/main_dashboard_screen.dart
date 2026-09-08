@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../widgets/custom_app_bar.dart';
@@ -10,8 +11,6 @@ import 'timer_screen.dart';
 import 'calendar_screen.dart';
 import 'profile_screen.dart';
 
-/// Stateful shell that hosts the four main views via [IndexedStack],
-/// a shared [CustomAppBar], and a [CustomNavBar].
 class MainDashboardScreen extends StatefulWidget {
   const MainDashboardScreen({super.key});
 
@@ -42,9 +41,7 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
   void _openMenu() {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => const ProfileScreen(),
-      ),
+      MaterialPageRoute(builder: (context) => const ProfileScreen()),
     );
   }
 
@@ -56,10 +53,7 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
         onCalendarPressed: _openCalendar,
         onMenuPressed: _openMenu,
       ),
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _screens,
-      ),
+      body: IndexedStack(index: _currentIndex, children: _screens),
       bottomNavigationBar: CustomNavBar(
         currentIndex: _currentIndex,
         onTabSelected: _onTabSelected,
@@ -67,12 +61,6 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
     );
   }
 
-  // ─────────────────────────────────────────────────
-  // Circular Reveal Route for CalendarScreen
-  // ─────────────────────────────────────────────────
-
-  /// Creates a [PageRouteBuilder] with a [ClipPath] animation that expands
-  /// from a 25 % circle (originating near the calendar icon) to a full page.
   Route<dynamic> _circularRevealRoute() {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) =>
@@ -83,10 +71,8 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
         final screenSize = MediaQuery.of(context).size;
         final topPadding = MediaQuery.of(context).padding.top;
 
-        // Position of calendar icon in the search bar row (~ left side)
         final origin = Offset(33, topPadding + 65);
 
-        // Transition color morphs from 0xFF1B1B1A (dark) -> 0xFFCD0033 (crimson)
         final animColor = Color.lerp(
           const Color(0xFF1B1B1A),
           const Color(0xFFCD0033),
@@ -101,15 +87,9 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
           ),
           child: Stack(
             children: [
-              // Expanding color transition background layer
-              Positioned.fill(
-                child: Container(color: animColor),
-              ),
-              // Calendar screen content
-              Opacity(
-                opacity: animation.value,
-                child: child,
-              ),
+              Positioned.fill(child: Container(color: animColor)),
+
+              Opacity(opacity: animation.value, child: child),
             ],
           ),
         );
@@ -118,11 +98,6 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
   }
 }
 
-/// Custom clipper that reveals the page through an expanding circle.
-///
-/// At [fraction] = 0 the circle has 25% of the maximum radius needed
-/// to cover the screen from [center]. At [fraction] = 1 the circle
-/// fully covers the viewport.
 class _CircularRevealClipper extends CustomClipper<Path> {
   final double fraction;
   final Offset center;
@@ -136,17 +111,14 @@ class _CircularRevealClipper extends CustomClipper<Path> {
 
   @override
   Path getClip(Size size) {
-    // Maximum radius = distance from origin to the farthest corner.
     final maxRadius = _maxDistanceToCorner(size);
 
-    // Interpolate from 25 % of max radius → 100 %.
     final startRadius = maxRadius * 0.25;
     final radius = startRadius + (maxRadius - startRadius) * fraction;
 
     return Path()..addOval(Rect.fromCircle(center: center, radius: radius));
   }
 
-  /// Computes the distance from [center] to the farthest corner of [size].
   double _maxDistanceToCorner(Size size) {
     final corners = [
       Offset.zero,

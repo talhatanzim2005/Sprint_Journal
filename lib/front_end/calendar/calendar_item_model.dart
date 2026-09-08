@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Data model representing a calendar event or task.
 class CalendarItem {
   final String id;
   final String title;
@@ -8,7 +7,7 @@ class CalendarItem {
   final TimeOfDay startTime;
   final TimeOfDay endTime;
   final DateTime date;
-  final bool isEvent; // true for "Upcoming Event", false for "Task"
+  final bool isEvent;
 
   const CalendarItem({
     required this.id,
@@ -20,7 +19,6 @@ class CalendarItem {
     this.isEvent = true,
   });
 
-  /// CopyWith helper method for editing existing items
   CalendarItem copyWith({
     String? id,
     String? title,
@@ -41,7 +39,6 @@ class CalendarItem {
     );
   }
 
-  /// Formats TimeOfDay into HH:mm (24-hour style matching reference image)
   static String formatTime(TimeOfDay time) {
     final hour = time.hour.toString().padLeft(2, '0');
     final minute = time.minute.toString().padLeft(2, '0');

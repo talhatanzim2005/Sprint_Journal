@@ -9,18 +9,12 @@ class ProgressTrackerScreen extends StatefulWidget {
   const ProgressTrackerScreen({super.key});
 
   @override
-  State<ProgressTrackerScreen> createState() =>
-      _ProgressTrackerScreenState();
+  State<ProgressTrackerScreen> createState() => _ProgressTrackerScreenState();
 }
 
 class _ProgressTrackerScreenState extends State<ProgressTrackerScreen> {
-
-  // ---------------- THEME COLORS ----------------
-
   static const Color bgColor = Color(0xFF1B1B1A);
   static const Color redColor = Color(0xFFCD0033);
-
-  // ---------------- HABITS ----------------
 
   List<String> habits = [
     'Drink 8 glasses of water',
@@ -31,21 +25,10 @@ class _ProgressTrackerScreenState extends State<ProgressTrackerScreen> {
     'Sleep before 11 PM',
   ];
 
-  List<bool> habitDone = [
-    true,
-    false,
-    true,
-    true,
-    false,
-    false,
-  ];
-
-  // ---------------- STREAK DATA ----------------
+  List<bool> habitDone = [true, false, true, true, false, false];
 
   int currentStreak = 7;
   int bestStreak = 12;
-
-  // ---------------- COUNT COMPLETED HABITS ----------------
 
   int _getCompletedCount() {
     int count = 0;
@@ -59,47 +42,26 @@ class _ProgressTrackerScreenState extends State<ProgressTrackerScreen> {
     return count;
   }
 
-  // ---------------- SHOW HABITS ----------------
-
   void _showHabits() {
-    showHabitsDialog(
-      context,
-      habits,
-      habitDone,
-          (index, value) {
-        setState(() {
-          habitDone[index] = value;
-        });
-      },
-    );
+    showHabitsDialog(context, habits, habitDone, (index, value) {
+      setState(() {
+        habitDone[index] = value;
+      });
+    });
   }
-
-  // ---------------- SHOW COMPLETIONS ----------------
 
   void _showCompletions() {
-    showCompletionsDialog(
-      context,
-      _getCompletedCount(),
-      habits.length,
-    );
+    showCompletionsDialog(context, _getCompletedCount(), habits.length);
   }
 
-  // ---------------- SHOW STREAK ----------------
-
   void _showStreak() {
-    showStreakDialog(
-      context,
-      currentStreak,
-      bestStreak,
-    );
+    showStreakDialog(context, currentStreak, bestStreak);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: bgColor,
-
-      // ---------------- APP BAR ----------------
 
       appBar: AppBar(
         backgroundColor: bgColor,
@@ -115,8 +77,6 @@ class _ProgressTrackerScreenState extends State<ProgressTrackerScreen> {
         ),
       ),
 
-      // ---------------- BODY ----------------
-
       body: Scrollbar(
         thumbVisibility: true,
         thickness: 6,
@@ -129,11 +89,6 @@ class _ProgressTrackerScreenState extends State<ProgressTrackerScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
-                // ==================================================
-                // YOUR PROGRESS
-                // ==================================================
-
                 const Text(
                   'Your Progress',
                   style: TextStyle(
@@ -144,8 +99,6 @@ class _ProgressTrackerScreenState extends State<ProgressTrackerScreen> {
                 ),
 
                 const SizedBox(height: 15),
-
-                // ---------------- SUMMARY CARDS ----------------
 
                 ProgressSummary(
                   totalHabits: habits.length,
@@ -158,10 +111,6 @@ class _ProgressTrackerScreenState extends State<ProgressTrackerScreen> {
                 ),
 
                 const SizedBox(height: 30),
-
-                // ==================================================
-                // THIS WEEK
-                // ==================================================
 
                 const Text(
                   'This Week',
@@ -176,23 +125,14 @@ class _ProgressTrackerScreenState extends State<ProgressTrackerScreen> {
 
                 const Text(
                   'Habit completion for the last 7 days',
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 14,
-                  ),
+                  style: TextStyle(color: Colors.white70, fontSize: 14),
                 ),
 
                 const SizedBox(height: 15),
 
-                const ProgressGraph(
-                  isThirtyDays: false,
-                ),
+                const ProgressGraph(isThirtyDays: false),
 
                 const SizedBox(height: 30),
-
-                // ==================================================
-                // LAST 30 DAYS
-                // ==================================================
 
                 const Text(
                   'Last 30 Days',
@@ -207,23 +147,14 @@ class _ProgressTrackerScreenState extends State<ProgressTrackerScreen> {
 
                 const Text(
                   'Your habit completion for the last 30 days',
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 14,
-                  ),
+                  style: TextStyle(color: Colors.white70, fontSize: 14),
                 ),
 
                 const SizedBox(height: 15),
 
-                const ProgressGraph(
-                  isThirtyDays: true,
-                ),
+                const ProgressGraph(isThirtyDays: true),
 
                 const SizedBox(height: 20),
-
-                // ==================================================
-                // CONSISTENCY
-                // ==================================================
 
                 Container(
                   width: double.infinity,
@@ -235,17 +166,13 @@ class _ProgressTrackerScreenState extends State<ProgressTrackerScreen> {
                   ),
 
                   child: Row(
-                    mainAxisAlignment:
-                    MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
                     children: [
-
                       const Column(
-                        crossAxisAlignment:
-                        CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
 
                         children: [
-
                           Text(
                             '30-Day Consistency',
                             style: TextStyle(

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
 
-  // Theme colors
   static const Color bgColor = Color(0xFF1B1B1A);
   static const Color cardColor = Color(0xFF252524);
   static const Color redColor = Color(0xFFCD0033);
@@ -19,15 +18,10 @@ class SignUpScreen extends StatelessWidget {
 
         title: const Text(
           'Sign Up',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
 
-        iconTheme: const IconThemeData(
-          color: Colors.white,
-        ),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
 
       body: SafeArea(
@@ -39,10 +33,7 @@ class SignUpScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
 
               children: [
-
                 const SizedBox(height: 15),
-
-                // ---------------- TITLE ----------------
 
                 const Text(
                   'Create your account',
@@ -57,15 +48,10 @@ class SignUpScreen extends StatelessWidget {
 
                 const Text(
                   'Enter your information to get started.',
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 15,
-                  ),
+                  style: TextStyle(color: Colors.white70, fontSize: 15),
                 ),
 
                 const SizedBox(height: 35),
-
-                // ---------------- NAME ----------------
 
                 const Text(
                   'Name',
@@ -78,16 +64,12 @@ class SignUpScreen extends StatelessWidget {
                 const SizedBox(height: 8),
 
                 TextField(
-                  style: const TextStyle(
-                    color: Colors.white,
-                  ),
+                  style: const TextStyle(color: Colors.white),
 
                   decoration: InputDecoration(
                     hintText: 'Enter your name',
 
-                    hintStyle: const TextStyle(
-                      color: Colors.white54,
-                    ),
+                    hintStyle: const TextStyle(color: Colors.white54),
 
                     prefixIcon: const Icon(
                       Icons.person_outline,
@@ -106,8 +88,6 @@ class SignUpScreen extends StatelessWidget {
 
                 const SizedBox(height: 20),
 
-                // ---------------- EMAIL ----------------
-
                 const Text(
                   'Email',
                   style: TextStyle(
@@ -121,16 +101,12 @@ class SignUpScreen extends StatelessWidget {
                 TextField(
                   keyboardType: TextInputType.emailAddress,
 
-                  style: const TextStyle(
-                    color: Colors.white,
-                  ),
+                  style: const TextStyle(color: Colors.white),
 
                   decoration: InputDecoration(
                     hintText: 'Enter your email',
 
-                    hintStyle: const TextStyle(
-                      color: Colors.white54,
-                    ),
+                    hintStyle: const TextStyle(color: Colors.white54),
 
                     prefixIcon: const Icon(
                       Icons.email_outlined,
@@ -149,8 +125,6 @@ class SignUpScreen extends StatelessWidget {
 
                 const SizedBox(height: 20),
 
-                // ---------------- PASSWORD ----------------
-
                 const Text(
                   'Password',
                   style: TextStyle(
@@ -164,16 +138,12 @@ class SignUpScreen extends StatelessWidget {
                 TextField(
                   obscureText: true,
 
-                  style: const TextStyle(
-                    color: Colors.white,
-                  ),
+                  style: const TextStyle(color: Colors.white),
 
                   decoration: InputDecoration(
                     hintText: 'Create a password',
 
-                    hintStyle: const TextStyle(
-                      color: Colors.white54,
-                    ),
+                    hintStyle: const TextStyle(color: Colors.white54),
 
                     prefixIcon: const Icon(
                       Icons.lock_outline,
@@ -192,8 +162,6 @@ class SignUpScreen extends StatelessWidget {
 
                 const SizedBox(height: 20),
 
-                // ---------------- CONFIRM PASSWORD ----------------
-
                 const Text(
                   'Confirm Password',
                   style: TextStyle(
@@ -207,16 +175,12 @@ class SignUpScreen extends StatelessWidget {
                 TextField(
                   obscureText: true,
 
-                  style: const TextStyle(
-                    color: Colors.white,
-                  ),
+                  style: const TextStyle(color: Colors.white),
 
                   decoration: InputDecoration(
                     hintText: 'Confirm your password',
 
-                    hintStyle: const TextStyle(
-                      color: Colors.white54,
-                    ),
+                    hintStyle: const TextStyle(color: Colors.white54),
 
                     prefixIcon: const Icon(
                       Icons.lock_outline,
@@ -235,24 +199,18 @@ class SignUpScreen extends StatelessWidget {
 
                 const SizedBox(height: 35),
 
-                // ---------------- CREATE ACCOUNT BUTTON ----------------
-
                 SizedBox(
                   width: double.infinity,
                   height: 50,
 
                   child: ElevatedButton(
                     onPressed: () {
-
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text(
-                            'Account created successfully!',
-                          ),
+                          content: Text('Account created successfully!'),
                         ),
                       );
 
-                      // Go back to Sign In page
                       Navigator.pop(context);
                     },
 
@@ -277,23 +235,17 @@ class SignUpScreen extends StatelessWidget {
 
                 const SizedBox(height: 20),
 
-                // ---------------- SIGN IN ----------------
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
 
                   children: [
-
                     const Text(
                       'Already have an account? ',
-                      style: TextStyle(
-                        color: Colors.white70,
-                      ),
+                      style: TextStyle(color: Colors.white70),
                     ),
 
                     TextButton(
                       onPressed: () {
-                        // Go back to Sign In page
                         Navigator.pop(context);
                       },
 

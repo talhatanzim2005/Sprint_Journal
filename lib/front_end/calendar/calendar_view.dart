@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-/// Top calendar component occupying ~40% of the body height.
 class CalendarView extends StatelessWidget {
   final DateTime focusedDay;
   final DateTime? selectedDay;
@@ -44,8 +43,18 @@ class CalendarView extends StatelessWidget {
           titleCentered: true,
           titleTextFormatter: (date, locale) {
             final months = [
-              'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN',
-              'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'
+              'JAN',
+              'FEB',
+              'MAR',
+              'APR',
+              'MAY',
+              'JUN',
+              'JUL',
+              'AUG',
+              'SEP',
+              'OCT',
+              'NOV',
+              'DEC',
             ];
             return '${date.day} ${months[date.month - 1]} ${date.year}';
           },
@@ -55,8 +64,16 @@ class CalendarView extends StatelessWidget {
             fontWeight: FontWeight.w700,
             letterSpacing: 0.8,
           ),
-          leftChevronIcon: const Icon(Icons.chevron_left, color: _fontColor, size: 22),
-          rightChevronIcon: const Icon(Icons.chevron_right, color: _fontColor, size: 22),
+          leftChevronIcon: const Icon(
+            Icons.chevron_left,
+            color: _fontColor,
+            size: 22,
+          ),
+          rightChevronIcon: const Icon(
+            Icons.chevron_right,
+            color: _fontColor,
+            size: 22,
+          ),
           headerPadding: const EdgeInsets.symmetric(vertical: 0.0),
           leftChevronPadding: const EdgeInsets.all(4.0),
           rightChevronPadding: const EdgeInsets.all(4.0),
@@ -74,10 +91,7 @@ class CalendarView extends StatelessWidget {
           ),
         ),
         calendarStyle: CalendarStyle(
-          defaultTextStyle: const TextStyle(
-            color: _fontColor,
-            fontSize: 13.0,
-          ),
+          defaultTextStyle: const TextStyle(color: _fontColor, fontSize: 13.0),
           weekendTextStyle: const TextStyle(
             color: _highlightColor,
             fontSize: 13.0,

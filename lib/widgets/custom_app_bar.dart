@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Shared top bar for all dashboard views.
-///
-/// Layout (MainAxisAlignment.spaceBetween):
-///   Left  — Calendar IconButton
-///   Center — Date text + full-width SearchBar
-///   Right  — Hamburger Menu IconButton
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onCalendarPressed;
   final VoidCallback onMenuPressed;
@@ -16,7 +10,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.onMenuPressed,
   });
 
-  // ── Color tokens ──
   static const Color _bgColor = Color(0xFF1B1B1A);
   static const Color _fontColor = Color(0xFFFFF4E0);
   static const Color _crimson = Color(0xFFCD0033);
@@ -42,7 +35,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // ── Top Section: Formatted Date ──
           Text(
             _formattedDate(),
             textAlign: TextAlign.center,
@@ -55,11 +47,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
           const SizedBox(height: 8),
 
-          // ── Bottom Section: Row containing Calendar, SearchBar & Menu ──
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Left: Calendar Icon
               _AppBarIconButton(
                 icon: Icons.calendar_today_rounded,
                 onPressed: onCalendarPressed,
@@ -67,7 +57,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
               const SizedBox(width: 8),
 
-              // Center: Search Bar
               Expanded(
                 child: Container(
                   height: 42,
@@ -106,7 +95,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
               const SizedBox(width: 8),
 
-              // Right: Menu Icon
               _AppBarIconButton(
                 icon: Icons.menu_rounded,
                 onPressed: onMenuPressed,
@@ -118,7 +106,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  /// Returns a formatted date string like "Monday, August 31".
   String _formattedDate() {
     final now = DateTime.now();
 
@@ -152,7 +139,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 }
 
-/// Reusable icon button styled for the app bar.
 class _AppBarIconButton extends StatelessWidget {
   final IconData icon;
   final VoidCallback onPressed;

@@ -12,13 +12,11 @@ class TimerScreen extends StatefulWidget {
 }
 
 class _TimerScreenState extends State<TimerScreen> {
-
   int remainingSeconds = 25 * 60;
 
   Timer? timer;
 
   bool isRunning = false;
-
 
   @override
   void initState() {
@@ -27,9 +25,7 @@ class _TimerScreenState extends State<TimerScreen> {
     remainingSeconds = 25 * 60;
   }
 
-
   void startTimer() {
-
     if (isRunning || remainingSeconds == 0) {
       return;
     }
@@ -38,31 +34,22 @@ class _TimerScreenState extends State<TimerScreen> {
       isRunning = true;
     });
 
-    timer = Timer.periodic(
-      const Duration(seconds: 1),
-          (timer) {
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (remainingSeconds > 0) {
+        setState(() {
+          remainingSeconds--;
+        });
+      } else {
+        timer.cancel();
 
-        if (remainingSeconds > 0) {
-
-          setState(() {
-            remainingSeconds--;
-          });
-
-        } else {
-
-          timer.cancel();
-
-          setState(() {
-            isRunning = false;
-          });
-        }
-      },
-    );
+        setState(() {
+          isRunning = false;
+        });
+      }
+    });
   }
 
-
   void pauseTimer() {
-
     timer?.cancel();
 
     setState(() {
@@ -71,7 +58,6 @@ class _TimerScreenState extends State<TimerScreen> {
   }
 
   void resetTimer() {
-
     timer?.cancel();
 
     setState(() {
@@ -80,9 +66,7 @@ class _TimerScreenState extends State<TimerScreen> {
     });
   }
 
-
   String get formattedTime {
-
     int minutes = remainingSeconds ~/ 60;
 
     int seconds = remainingSeconds % 60;
@@ -91,15 +75,12 @@ class _TimerScreenState extends State<TimerScreen> {
         "${seconds.toString().padLeft(2, '0')}";
   }
 
-
   @override
   void dispose() {
-
     timer?.cancel();
 
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +100,7 @@ class _TimerScreenState extends State<TimerScreen> {
           ),
           const SizedBox(height: 10),
           const Text(
-            "Focus Time",
+            "Focus Timer",
             style: TextStyle(
               color: Colors.white70,
               fontSize: 20,
@@ -136,10 +117,7 @@ class _TimerScreenState extends State<TimerScreen> {
                 isRunning ? pauseTimer : startTimer,
               ),
               const SizedBox(width: 20),
-              _buildControlButton(
-                Icons.stop,
-                resetTimer,
-              ),
+              _buildControlButton(Icons.stop, resetTimer),
             ],
           ),
         ],
@@ -147,36 +125,22 @@ class _TimerScreenState extends State<TimerScreen> {
     );
   }
 
-  Widget _buildControlButton(
-      IconData icon,
-      VoidCallback function,
-      ) {
-
+  Widget _buildControlButton(IconData icon, VoidCallback function) {
     return Container(
-
       width: 70,
 
       height: 70,
 
       decoration: const BoxDecoration(
-
         color: Color(0xFFB71C1C),
 
         shape: BoxShape.circle,
       ),
 
       child: IconButton(
-
         onPressed: function,
 
-        icon: Icon(
-
-          icon,
-
-          color: Colors.white,
-
-          size: 35,
-        ),
+        icon: Icon(icon, color: Colors.white, size: 35),
       ),
     );
   }
