@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 
-/// Daily overview and active sprint metrics.
-///
-/// No Scaffold — [MainDashboardScreen] provides the outer shell.
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      // 1. Background - Dark/black background
       color: const Color(0xFF121212),
       width: double.infinity,
       child: Padding(
@@ -18,8 +14,6 @@ class HomeScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 20),
-
-            // 2. Greeting
             const Text(
               "Hi, Talha.",
               style: TextStyle(
@@ -29,8 +23,6 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 40),
-
-            // 3. My Journal section
             const Text(
               "My Journal",
               style: TextStyle(
@@ -40,13 +32,11 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 15),
-            
-            // Large empty rectangular box (Placeholder)
             Container(
               height: 200,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Colors.transparent, // Empty inside
+                color: Colors.transparent,
                 border: Border.all(color: Colors.white30, width: 2),
                 borderRadius: BorderRadius.circular(15),
               ),
@@ -59,8 +49,6 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 40),
-
-            // 4. Quick Journal section
             const Text(
               "Quick Journal",
               style: TextStyle(
@@ -70,8 +58,6 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 15),
-            
-            // Four small boxes arranged horizontally
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -87,7 +73,6 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // Helper method to create small quick journal placeholder boxes
   Widget _buildQuickJournalBox(IconData icon) {
     return Container(
       height: 70,

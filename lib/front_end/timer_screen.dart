@@ -24,12 +24,10 @@ class _TimerScreenState extends State<TimerScreen> {
   void initState() {
     super.initState();
 
-    // Initial timer value
     remainingSeconds = 25 * 60;
   }
 
 
-  // Start timer
   void startTimer() {
 
     if (isRunning || remainingSeconds == 0) {
@@ -42,7 +40,7 @@ class _TimerScreenState extends State<TimerScreen> {
 
     timer = Timer.periodic(
       const Duration(seconds: 1),
-      (timer) {
+          (timer) {
 
         if (remainingSeconds > 0) {
 
@@ -63,7 +61,6 @@ class _TimerScreenState extends State<TimerScreen> {
   }
 
 
-  // Pause timer
   void pauseTimer() {
 
     timer?.cancel();
@@ -73,8 +70,6 @@ class _TimerScreenState extends State<TimerScreen> {
     });
   }
 
-
-  // Reset timer
   void resetTimer() {
 
     timer?.cancel();
@@ -86,7 +81,6 @@ class _TimerScreenState extends State<TimerScreen> {
   }
 
 
-  // Format timer
   String get formattedTime {
 
     int minutes = remainingSeconds ~/ 60;
@@ -153,15 +147,10 @@ class _TimerScreenState extends State<TimerScreen> {
     );
   }
 
-
-  // -------------------------
-  // CONTROL BUTTON
-  // -------------------------
-
   Widget _buildControlButton(
-    IconData icon,
-    VoidCallback function,
-  ) {
+      IconData icon,
+      VoidCallback function,
+      ) {
 
     return Container(
 
