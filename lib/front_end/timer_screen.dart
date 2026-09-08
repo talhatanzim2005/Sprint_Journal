@@ -109,111 +109,44 @@ class _TimerScreenState extends State<TimerScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-    double progress = remainingSeconds / (25 * 60);
-
     return Container(
-
       color: const Color(0xFF121212),
-
       child: Column(
-
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-
-          const SizedBox(height: 40),
-
-          Expanded(
-
-            child: Stack(
-
-              alignment: Alignment.center,
-
-              children: [
-
-                SizedBox(
-
-                  width: 300,
-
-                  height: 300,
-
-                  child: CircularProgressIndicator(
-
-                    backgroundColor: Colors.grey.shade800,
-
-                    color: const Color(0xFFB71C1C),
-
-                    value: progress,
-
-                    strokeWidth: 6,
-                  ),
-                ),
-
-                Column(
-
-                  mainAxisSize: MainAxisSize.min,
-
-                  children: [
-
-                    Text(
-
-                      formattedTime,
-
-                      style: const TextStyle(
-
-                        color: Color(0xFFFFF4E0),
-
-                        fontSize: 60,
-
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-
-                    const SizedBox(height: 10),
-
-                    const Text(
-
-                      "Focus Time",
-
-                      style: TextStyle(
-
-                        color: Colors.white70,
-
-                        fontSize: 20,
-
-                        fontWeight: FontWeight.normal,
-
-                        letterSpacing: 1,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+          Text(
+            formattedTime,
+            style: const TextStyle(
+              color: Color(0xFFFFF4E0),
+              fontSize: 80,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 2,
             ),
           ),
-
-          Padding(
-
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 40),
-
-            child: Row(
-
-              mainAxisAlignment: MainAxisAlignment.center,
-
-              children: [
-
-                _buildControlButton(
-                  isRunning ? Icons.pause : Icons.play_arrow,
-                  isRunning ? pauseTimer : startTimer,
-                ),
-
-                const SizedBox(width: 20),
-
-                _buildControlButton(
-                  Icons.stop,
-                  resetTimer,
-                ),
-              ],
+          const SizedBox(height: 10),
+          const Text(
+            "Focus Time",
+            style: TextStyle(
+              color: Colors.white70,
+              fontSize: 20,
+              fontWeight: FontWeight.normal,
+              letterSpacing: 1,
             ),
+          ),
+          const SizedBox(height: 60),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _buildControlButton(
+                isRunning ? Icons.pause : Icons.play_arrow,
+                isRunning ? pauseTimer : startTimer,
+              ),
+              const SizedBox(width: 20),
+              _buildControlButton(
+                Icons.stop,
+                resetTimer,
+              ),
+            ],
           ),
         ],
       ),
