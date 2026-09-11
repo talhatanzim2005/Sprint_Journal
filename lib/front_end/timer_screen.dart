@@ -1,17 +1,16 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 class TimerScreen extends StatefulWidget {
   const TimerScreen({super.key});
 
   @override
-  State<TimerScreen> createState() {
-    return _TimerScreenState();
+  State<TimerScreen> createState(){
+    return _TimeScreenState();
   }
 }
 
-class _TimerScreenState extends State<TimerScreen> {
+class _TimeScreenState extends State<TimerScreen> {
   int remainingSeconds = 25 * 60;
 
   Timer? timer;
@@ -19,14 +18,14 @@ class _TimerScreenState extends State<TimerScreen> {
   bool isRunning = false;
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
 
     remainingSeconds = 25 * 60;
   }
 
-  void startTimer() {
-    if (isRunning || remainingSeconds == 0) {
+  void startTimer(){
+    if(isRunning || remainingSeconds == 0){
       return;
     }
 
@@ -34,12 +33,12 @@ class _TimerScreenState extends State<TimerScreen> {
       isRunning = true;
     });
 
-    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (remainingSeconds > 0) {
+    timer = Timer.periodic(const Duration(seconds: 1), (timer){
+      if(remainingSeconds > 0){
         setState(() {
           remainingSeconds--;
         });
-      } else {
+      }else{
         timer.cancel();
 
         setState(() {
@@ -49,15 +48,14 @@ class _TimerScreenState extends State<TimerScreen> {
     });
   }
 
-  void pauseTimer() {
+  void pauseTimer(){
     timer?.cancel();
 
     setState(() {
       isRunning = false;
     });
   }
-
-  void resetTimer() {
+  void resetTimer(){
     timer?.cancel();
 
     setState(() {
@@ -71,17 +69,16 @@ class _TimerScreenState extends State<TimerScreen> {
 
     int seconds = remainingSeconds % 60;
 
-    return "${minutes.toString().padLeft(2, '0')}:"
-        "${seconds.toString().padLeft(2, '0')}";
+    return "${minutes.toString().padLeft(2,'0')}:"
+        "${seconds.toString().padLeft(2,'0')}";
   }
 
   @override
-  void dispose() {
+  void dispose(){
     timer?.cancel();
 
     super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -124,23 +121,18 @@ class _TimerScreenState extends State<TimerScreen> {
       ),
     );
   }
-
-  Widget _buildControlButton(IconData icon, VoidCallback function) {
+  Widget _buildControlButton(IconData icon, VoidCallback function){
     return Container(
       width: 70,
-
       height: 70,
 
       decoration: const BoxDecoration(
         color: Color(0xFFB71C1C),
-
         shape: BoxShape.circle,
       ),
-
       child: IconButton(
-        onPressed: function,
-
-        icon: Icon(icon, color: Colors.white, size: 35),
+          onPressed: function,
+          icon: Icon(icon, color: Colors.white,size: 35),
       ),
     );
   }
