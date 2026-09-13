@@ -18,7 +18,6 @@ class CalendarItem {
     required this.date,
     this.isEvent = true,
   });
-
   CalendarItem copyWith({
     String? id,
     String? title,
@@ -27,18 +26,15 @@ class CalendarItem {
     TimeOfDay? endTime,
     DateTime? date,
     bool? isEvent,
-  }) {
-    return CalendarItem(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      description: description ?? this.description,
-      startTime: startTime ?? this.startTime,
-      endTime: endTime ?? this.endTime,
-      date: date ?? this.date,
-      isEvent: isEvent ?? this.isEvent,
-    );
-  }
-
+  }) => CalendarItem(
+    id: id ?? this.id,
+    title: title ?? this.title,
+    description: description ?? this.description,
+    startTime: startTime ?? this.startTime,
+    endTime: endTime ?? this.endTime,
+    date: date ?? this.date,
+    isEvent: isEvent ?? this.isEvent,
+  );
   static String formatTime(TimeOfDay time) {
     final hour = time.hour.toString().padLeft(2, '0');
     final minute = time.minute.toString().padLeft(2, '0');
