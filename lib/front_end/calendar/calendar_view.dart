@@ -4,12 +4,16 @@ import 'package:table_calendar/table_calendar.dart';
 class CalendarView extends StatelessWidget {
   final DateTime focusedDay;
   final DateTime? selectedDay;
+  // to show highlight on specific days
   final Function(DateTime selectedDay, DateTime focusedDay) onDaySelected;
   final Function(DateTime focusedDay) onPageChanged;
 
-  static const Color _bgColor = Color(0xFF1B1B1A);
-  static const Color _fontColor = Color(0xFFFFF4E0);
-  static const Color _highlightColor = Color(0xFFCD0033);
+  // Dark background
+  static const Color backgroundColor = Color.fromARGB(255, 27, 27, 26);
+  // Off-white cream font
+  static const Color fontColor = Color.fromARGB(255, 255, 244, 224);
+  // Crimson red accent highlight
+  static const Color accentColor = Color.fromARGB(255, 205, 0, 51);
 
   const CalendarView({
     super.key,
@@ -23,100 +27,99 @@ class CalendarView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: _bgColor,
+        color: backgroundColor,
         borderRadius: BorderRadius.circular(16),
       ),
       child: TableCalendar(
-        firstDay: DateTime.utc(2020, 1, 1),
-        lastDay: DateTime.utc(2040, 12, 31),
+        firstDay: DateTime.utc(2000, 1, 1),
+        lastDay: DateTime.utc(2100, 12, 31),
         focusedDay: focusedDay,
         calendarFormat: CalendarFormat.month,
+        calendarStyle: CalendarStyle(
+          defaultTextStyle: TextStyle(fontSize: 12.0, color: fontColor),
+          weekendTextStyle: TextStyle(fontSize: 12.0, color: accentColor),
+          outsideTextStyle: TextStyle(
+            fontSize: 12.0,
+            color: fontColor.withAlpha(76),
+          ),
+
+          holidayTextStyle: TextStyle(fontSize: 12.0),
+          //to make selected date date and today's date glowing red
+          todayDecoration: BoxDecoration(
+            color: fontColor.withAlpha(156),
+            shape: BoxShape.circle,
+          ),
+          todayTextStyle: TextStyle(
+            color: accentColor,
+            fontWeight: FontWeight.bold,
+          ),
+          selectedDecoration: BoxDecoration(
+            color: accentColor.withAlpha(76),
+            shape: BoxShape.circle,
+          ),
+          selectedTextStyle: TextStyle(
+            color: fontColor,
+            fontWeight: FontWeight.bold,
+          ),
+          cellMargin: EdgeInsets.all(2.0),
+          cellPadding: EdgeInsets.zero,
+        ),
         sixWeekMonthsEnforced: true,
         rowHeight: 32,
         daysOfWeekHeight: 22,
         selectedDayPredicate: (day) => isSameDay(selectedDay, day),
         onDaySelected: onDaySelected,
         onPageChanged: onPageChanged,
-        startingDayOfWeek: StartingDayOfWeek.monday,
+        startingDayOfWeek: StartingDayOfWeek.sunday,
+
         headerStyle: HeaderStyle(
           formatButtonVisible: false,
           titleCentered: true,
           titleTextFormatter: (date, locale) {
-            final months = [
-              'JAN',
-              'FEB',
-              'MAR',
-              'APR',
-              'MAY',
-              'JUN',
-              'JUL',
-              'AUG',
-              'SEP',
-              'OCT',
-              'NOV',
-              'DEC',
+            final month = [
+              'Jan',
+              'Feb',
+              'Mar',
+              'Apr',
+              'May',
+              'Jun',
+              'Jul',
+              'Aug',
+              'Sep',
+              'Oct',
+              'Nov',
+              'Dec',
             ];
-            return '${date.day} ${months[date.month - 1]} ${date.year}';
+            return '${date.day} ${month[date.month - 1]} ${date.year}';
           },
-          titleTextStyle: const TextStyle(
-            color: _fontColor,
-            fontSize: 16.0,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 0.8,
+          titleTextStyle: TextStyle(
+            color: fontColor,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            letterSpacing: .8,
           ),
-          leftChevronIcon: const Icon(
-            Icons.chevron_left,
-            color: _fontColor,
-            size: 22,
-          ),
-          rightChevronIcon: const Icon(
+          leftChevronIcon: Icon(Icons.chevron_left, color: fontColor, size: 22),
+          rightChevronIcon: Icon(
             Icons.chevron_right,
-            color: _fontColor,
+            color: fontColor,
             size: 22,
           ),
-          headerPadding: const EdgeInsets.symmetric(vertical: 0.0),
-          leftChevronPadding: const EdgeInsets.all(4.0),
-          rightChevronPadding: const EdgeInsets.all(4.0),
+
+          headerPadding: EdgeInsets.zero,
+          leftChevronPadding: EdgeInsets.all(4.0),
+          rightChevronPadding: EdgeInsets.all(4.0),
         ),
         daysOfWeekStyle: DaysOfWeekStyle(
           weekdayStyle: TextStyle(
-            color: _fontColor.withOpacity(0.6),
-            fontSize: 12.0,
-            fontWeight: FontWeight.w600,
+            color: fontColor,
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
           ),
           weekendStyle: TextStyle(
-            color: _highlightColor.withOpacity(0.8),
-            fontSize: 12.0,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        calendarStyle: CalendarStyle(
-          defaultTextStyle: const TextStyle(color: _fontColor, fontSize: 13.0),
-          weekendTextStyle: const TextStyle(
-            color: _highlightColor,
-            fontSize: 13.0,
-          ),
-          outsideTextStyle: TextStyle(
-            color: _fontColor.withOpacity(0.3),
-            fontSize: 13.0,
-          ),
-          todayDecoration: BoxDecoration(
-            color: _highlightColor.withOpacity(0.4),
-            shape: BoxShape.circle,
-          ),
-          selectedDecoration: const BoxDecoration(
-            color: _highlightColor,
-            shape: BoxShape.circle,
-          ),
-          todayTextStyle: const TextStyle(
-            color: _fontColor,
+            color: accentColor,
+            fontSize: 12,
             fontWeight: FontWeight.bold,
           ),
-          selectedTextStyle: const TextStyle(
-            color: _fontColor,
-            fontWeight: FontWeight.bold,
-          ),
-          cellMargin: const EdgeInsets.all(1),
         ),
       ),
     );
