@@ -18,8 +18,9 @@ class CalendarItem {
     required this.date,
     this.isEvent = true,
   });
+  //copywith method ensures to create a new copy of existing object with only specific field modification
   CalendarItem copyWith({
-    String? id,
+    String? id,//optional and nullable
     String? title,
     String? description,
     TimeOfDay? startTime,

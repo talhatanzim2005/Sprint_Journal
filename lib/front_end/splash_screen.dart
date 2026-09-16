@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'sign_in_screen.dart';
+import 'auth/sign_in_screen.dart';
 
 class OneTimeSplashScreen extends StatefulWidget {
   const OneTimeSplashScreen({super.key});

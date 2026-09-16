@@ -44,10 +44,10 @@ class _UpcomingTasksViewState extends State<UpcomingTasksView> {
       return item.date.year == widget.selectedDate.year &&
           item.date.month == widget.selectedDate.month &&
           item.date.day == widget.selectedDate.day;
-    }).toList();
+    }).toList();//it take 
 
     final dateHeader = DateFormat('EEE, MMM d').format(widget.selectedDate);
-
+    //up coming event,events num,no event default
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -106,7 +106,7 @@ class _UpcomingTasksViewState extends State<UpcomingTasksView> {
                 )
               : ListView.builder(
                   padding: const EdgeInsets.all(16),
-                  itemCount: dayItems.length,
+                  itemCount: dayItems.length,//calls getter of the list to count num of execution in itemBuilder
                   itemBuilder: (context, index) {
                     final item = dayItems[index];
                     final isSelected = item.id == widget.selectedItemId;
@@ -129,6 +129,7 @@ class _UpcomingTasksViewState extends State<UpcomingTasksView> {
                         ),
                         child: Row(
                           children: [
+                            //Dot_creation
                             Container(
                               width: 12,
                               height: 12,
@@ -141,6 +142,7 @@ class _UpcomingTasksViewState extends State<UpcomingTasksView> {
                             ),
                             const SizedBox(width: 12),
                             Expanded(
+                              //title and time in column,wraped in expanded
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -163,6 +165,7 @@ class _UpcomingTasksViewState extends State<UpcomingTasksView> {
                                 ],
                               ),
                             ),
+                            //edit and del button
                             IconButton(
                               icon: const Icon(
                                 Icons.edit_outlined,
