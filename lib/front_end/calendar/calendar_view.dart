@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarView extends StatelessWidget {
-  final DateTime focusedDay;
-  final DateTime? selectedDay;
+  final DateTime focusedDay;//curent day
+  final DateTime? selectedDay;//clicked by the user
   // to show highlight on specific days
   final Function(DateTime selectedDay, DateTime focusedDay) onDaySelected;
   final Function(DateTime focusedDay) onPageChanged;
@@ -35,6 +35,7 @@ class CalendarView extends StatelessWidget {
         lastDay: DateTime.utc(2100, 12, 31),
         focusedDay: focusedDay,
         calendarFormat: CalendarFormat.month,
+        //
         calendarStyle: CalendarStyle(
           defaultTextStyle: TextStyle(fontSize: 12.0, color: fontColor),
           weekendTextStyle: TextStyle(fontSize: 12.0, color: accentColor),
@@ -64,16 +65,16 @@ class CalendarView extends StatelessWidget {
           cellMargin: EdgeInsets.all(2.0),
           cellPadding: EdgeInsets.zero,
         ),
-        sixWeekMonthsEnforced: true,
+        sixWeekMonthsEnforced: false,
         rowHeight: 32,
         daysOfWeekHeight: 22,
         selectedDayPredicate: (day) => isSameDay(selectedDay, day),
         onDaySelected: onDaySelected,
         onPageChanged: onPageChanged,
-        startingDayOfWeek: StartingDayOfWeek.sunday,
+        startingDayOfWeek: StartingDayOfWeek.saturday,
 
         headerStyle: HeaderStyle(
-          formatButtonVisible: false,
+          formatButtonVisible: true,
           titleCentered: true,
           titleTextFormatter: (date, locale) {
             final month = [

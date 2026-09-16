@@ -1,15 +1,14 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_nav_bar.dart';
+import '../widgets/swipe_anim.dart';
 import 'home_screen.dart';
 import 'progress_tracker/progress_tracker_screen.dart';
-import 'journal_screen.dart';
+import 'journal/journal_screen.dart';
 import 'timer_screen.dart';
-import 'calendar_screen.dart';
-import 'profile_screen.dart';
+import 'calendar/calendar_screen.dart';
+import 'auth/profile_screen.dart';
 
 class MainDashboardScreen extends StatefulWidget {
   const MainDashboardScreen({super.key});
@@ -20,6 +19,7 @@ class MainDashboardScreen extends StatefulWidget {
 
 class _MainDashboardScreenState extends State<MainDashboardScreen> {
   int _currentIndex = 0;
+  final PageController _pageController = PageController();
 
   static const Color _bgColor = Color(0xFF1B1B1A);
 
@@ -31,17 +31,30 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
   ];
 
   void _onTabSelected(int index) {
+    final previousIndex = _currentIndex;
     setState(() => _currentIndex = index);
+    if ((index - previousIndex).abs() == 1) {
+      _pageController.animateToPage(
+        index,
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeOutCubic,
+      );
+    } else {
+      _pageController.jumpToPage(index);
+    }
   }
 
   void _openCalendar() {
-    Navigator.of(context).push(_circularRevealRoute());
+    Navigator.push(
+      context,
+      swipeAnimRoute(const CalendarScreen(), fromRight: false),
+    );
   }
 
   void _openMenu() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const ProfileScreen()),
+      swipeAnimRoute(const ProfileScreen(), fromRight: true),
     );
   }
 
@@ -53,89 +66,17 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
         onCalendarPressed: _openCalendar,
         onMenuPressed: _openMenu,
       ),
-      body: IndexedStack(index: _currentIndex, children: _screens),
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: (index) {
+          setState(() => _currentIndex = index);
+        },
+        children: _screens,
+      ),
       bottomNavigationBar: CustomNavBar(
         currentIndex: _currentIndex,
         onTabSelected: _onTabSelected,
       ),
     );
   }
-
-  Route<dynamic> _circularRevealRoute() {
-    return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) =>
-          const CalendarScreen(),
-      transitionDuration: const Duration(milliseconds: 550),
-      reverseTransitionDuration: const Duration(milliseconds: 400),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        final screenSize = MediaQuery.of(context).size;
-        final topPadding = MediaQuery.of(context).padding.top;
-
-        final origin = Offset(33, topPadding + 65);
-
-        final animColor = Color.lerp(
-          const Color(0xFF1B1B1A),
-          const Color(0xFFCD0033),
-          animation.value,
-        )!;
-
-        return ClipPath(
-          clipper: _CircularRevealClipper(
-            fraction: animation.value,
-            center: origin,
-            screenSize: screenSize,
-          ),
-          child: Stack(
-            children: [
-              Positioned.fill(child: Container(color: animColor)),
-
-              Opacity(opacity: animation.value, child: child),
-            ],
-          ),
-        );
-      },
-    );
-  }
-}
-
-class _CircularRevealClipper extends CustomClipper<Path> {
-  final double fraction;
-  final Offset center;
-  final Size screenSize;
-
-  _CircularRevealClipper({
-    required this.fraction,
-    required this.center,
-    required this.screenSize,
-  });
-
-  @override
-  Path getClip(Size size) {
-    final maxRadius = _maxDistanceToCorner(size);
-
-    final startRadius = maxRadius * 0.25;
-    final radius = startRadius + (maxRadius - startRadius) * fraction;
-
-    return Path()..addOval(Rect.fromCircle(center: center, radius: radius));
-  }
-
-  double _maxDistanceToCorner(Size size) {
-    final corners = [
-      Offset.zero,
-      Offset(size.width, 0),
-      Offset(0, size.height),
-      Offset(size.width, size.height),
-    ];
-
-    double maxDist = 0;
-    for (final corner in corners) {
-      final dist = (corner - center).distance;
-      maxDist = max(maxDist, dist);
-    }
-    return maxDist;
-  }
-
-  @override
-  bool shouldReclip(_CircularRevealClipper oldClipper) =>
-      fraction != oldClipper.fraction;
 }
