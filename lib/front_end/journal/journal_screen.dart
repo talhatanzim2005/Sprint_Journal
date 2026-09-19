@@ -9,8 +9,29 @@ class JournalScreen extends StatefulWidget {
 }
 
 class _JournalScreenState extends State<JournalScreen> {
-  // TODO: Start typing your state variables, controllers, and logic methods here!
+  static const Color backgroundColor = Color.fromARGB(255, 27, 27, 26);
+  static const Color fontColor = Color.fromARGB(255, 255, 244, 224);
+  static const Color accentColor = Color.fromARGB(255, 205, 0, 51);
+  static const Color cardColor = Color.fromARGB(255, 36, 36, 35);
 
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _descController = TextEditingController();
+
+  _DailyJournal get todayEntry => _DailyJournal(
+        title: _titleController.text.trim(),
+        description: _descController.text.trim(),
+      );
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descController.dispose();
+    super.dispose();
+  }
+
+  void _saveTodayEntry() {
+    // Save entry logic / persist state
+  }
 
   @override
   Widget build(BuildContext context) {
