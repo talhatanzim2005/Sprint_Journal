@@ -18,27 +18,24 @@ class CalendarItem {
     required this.date,
     this.isEvent = true,
   });
-
+  //copywith method ensures to create a new copy of existing object with only specific field modification
   CalendarItem copyWith({
-    String? id,
+    String? id,//optional and nullable
     String? title,
     String? description,
     TimeOfDay? startTime,
     TimeOfDay? endTime,
     DateTime? date,
     bool? isEvent,
-  }) {
-    return CalendarItem(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      description: description ?? this.description,
-      startTime: startTime ?? this.startTime,
-      endTime: endTime ?? this.endTime,
-      date: date ?? this.date,
-      isEvent: isEvent ?? this.isEvent,
-    );
-  }
-
+  }) => CalendarItem(
+    id: id ?? this.id,
+    title: title ?? this.title,
+    description: description ?? this.description,
+    startTime: startTime ?? this.startTime,
+    endTime: endTime ?? this.endTime,
+    date: date ?? this.date,
+    isEvent: isEvent ?? this.isEvent,
+  );
   static String formatTime(TimeOfDay time) {
     final hour = time.hour.toString().padLeft(2, '0');
     final minute = time.minute.toString().padLeft(2, '0');

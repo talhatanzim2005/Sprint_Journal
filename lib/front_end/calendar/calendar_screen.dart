@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'calendar/calendar_item_model.dart';
-import 'calendar/calendar_view.dart';
-import 'calendar/upcoming_tasks_view.dart';
-import '../widgets/event_form_sheet.dart';
+import 'calendar_item_model.dart';
+import 'calendar_view.dart';
+import 'upcoming_tasks_view.dart';
+import '../../widgets/event_form_sheet.dart';
 
 class CalendarScreen extends StatefulWidget {
   const CalendarScreen({super.key});
@@ -18,7 +18,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
   static const Color accentColor = Color.fromARGB(255, 205, 0, 51);
   static const Color sheetBgColor = Color.fromARGB(255, 36, 36, 35);
 
-  // Selected Date & focused month
   DateTime _focusedDay = DateTime.now();
   DateTime _selectedDate = DateTime.now();
   String? _selectedItemId;
@@ -28,25 +27,21 @@ class _CalendarScreenState extends State<CalendarScreen> {
   String _dateKey(DateTime date) =>
       '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
 
-  // Getter to quickly retrieve todays item
   List<CalendarItem> get _selectedDayItems =>
       _itemsMap[_dateKey(_selectedDate)] ?? [];
 
-  // Sort items sequentially by their start time
   void _sortItems(List<CalendarItem> list) => list.sort(
     (a, b) => (a.startTime.hour * 60 + a.startTime.minute).compareTo(
       b.startTime.hour * 60 + b.startTime.minute,
     ),
   );
 
-  // Add Item
   void _addItem(CalendarItem item) => setState(() {
     final list = _itemsMap.putIfAbsent(_dateKey(item.date), () => [])
       ..add(item);
     _sortItems(list);
   });
 
-  // Edit Item
   void _editItem(CalendarItem item) => setState(() {
     final list = _itemsMap[_dateKey(item.date)];
     if (list != null) {
@@ -58,7 +53,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
     }
   });
 
-  // Delete Item WITH Snackbar
   void _deleteItem(CalendarItem item) {
     setState(
       () => _itemsMap[_dateKey(item.date)]?.removeWhere((e) => e.id == item.id),
