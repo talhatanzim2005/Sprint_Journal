@@ -1,0 +1,25 @@
+{
+    "flutter": {
+        "platforms": {
+            "android": {
+                "default": {
+                    "projectId": "sprintjournal-70308",
+                    "appId": "1:199203356591:android:7163d8d72b32cd2058795a",
+                    "fileOutput": "android/app/google-services.json"
+                }
+            },
+            "dart": {
+                "lib/firebase_options.dart": {
+                    "projectId": "sprintjournal-70308",
+                    "configurations": {
+                        "android": "1:199203356591:android:7163d8d72b32cd2058795a",
+                        "ios": "1:199203356591:ios:c8d621733b609c6458795a",
+                        "macos": "1:199203356591:ios:c8d621733b609c6458795a",
+                        "web": "1:199203356591:web:ca9d1b4c989e4d4c58795a",
+                        "windows": "1:199203356591:web:85bf4cb118cc10fd58795a"
+                    }
+                }
+            }
+        }
+    }
+}

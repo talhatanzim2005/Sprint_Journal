@@ -33,6 +33,7 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
   void _onTabSelected(int index) {
     final previousIndex = _currentIndex;
     setState(() => _currentIndex = index);
+
     if ((index - previousIndex).abs() == 1) {
       _pageController.animateToPage(
         index,
