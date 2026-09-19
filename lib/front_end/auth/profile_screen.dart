@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../backend/auth_service.dart';
+import 'sign_in_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -6,14 +8,20 @@ class ProfileScreen extends StatefulWidget {
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
- class _ProfileScreenState extends State<ProfileScreen>
- {
-   String name='Rabeta Zannat';
-   String email='rabeta@gmail.com';
-   String aboutMe='CSE Student';
-   String journalStarted = 'August 2026';
-   int journalEntries = 0;
+class _ProfileScreenState extends State<ProfileScreen> {
+  late final String name;
+  late final String email;
+  final String aboutMe = 'CSE Student';
+  final String journalStarted = 'August 2026';
+  final int journalEntries = 0;
 
+  @override
+  void initState() {
+    super.initState();
+    final user = AuthService.instance.currentUser;
+    name = user?.displayName ?? 'User';
+    email = user?.email ?? '';
+  }
 
    @override
    Widget build(BuildContext context) {
@@ -165,8 +173,15 @@ class ProfileScreen extends StatefulWidget {
                          backgroundColor:const Color(0xFFDC143C),
                          foregroundColor: Colors.white
                      ),
-                     onPressed: (){
-
+                     onPressed: () async {
+                       await AuthService.instance.signOut();
+                       if (mounted) {
+                         Navigator.pushAndRemoveUntil(
+                           context,
+                           MaterialPageRoute(builder: (context) => const SignInScreen()),
+                           (route) => false,
+                         );
+                       }
                      },
                      child: const Text('Log Out'),
 

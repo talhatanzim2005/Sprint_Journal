@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "199203356591",
+    "project_id": "sprintjournal-70308",
+    "storage_bucket": "sprintjournal-70308.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:199203356591:android:7163d8d72b32cd2058795a",
+        "android_client_info": {
+          "package_name": "com.example.sprint_journal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBH-QhT4GjIHctzVMdHH9S1ZDa8dni6NWA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
