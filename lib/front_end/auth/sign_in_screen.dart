@@ -1,27 +1,59 @@
 import 'package:flutter/material.dart';
+import '../../backend/auth_service.dart';
+import 'main_dashboard_screen.dart';
 
-import 'sign_up_screen.dart';
-import '../main_dashboard_screen.dart';
-
-class SignInScreen extends StatelessWidget {
+class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
 
-  static const Color bgColor = Color(0xFF1B1B1A);
-  static const Color cardColor = Color(0xFF252524);
-  static const Color redColor = Color(0xFFCD0033);
+  @override
+  State<SignInScreen> createState() => _SignInScreenState();
+}
+
+class _SignInScreenState extends State<SignInScreen> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
+
+  Future<void> _signIn() async {
+    setState(() => _isLoading = true);
+    try {
+      await AuthService.instance.signInWithEmailPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const MainDashboardScreen()),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.toString())),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: bgColor,
-
-      body: SafeArea(
+      backgroundColor: const Color(0xFF1B1B1A),
+      body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(25),
-
+          padding: const EdgeInsets.all(20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-
             children: [
               const Text(
                 'SprintJournal',
@@ -31,9 +63,7 @@ class SignInScreen extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-
               const SizedBox(height: 10),
-
               const Text(
                 'Welcome back!',
                 style: TextStyle(
@@ -42,125 +72,49 @@ class SignInScreen extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-
               const SizedBox(height: 5),
-
               const Text(
                 'Sign in to continue',
                 style: TextStyle(color: Colors.white70, fontSize: 16),
               ),
-
               const SizedBox(height: 35),
-
               TextField(
+                controller: _emailController,
                 style: const TextStyle(color: Colors.white),
-
-                decoration: InputDecoration(
-                  hintText: 'Email',
-                  hintStyle: const TextStyle(color: Colors.white54),
-
-                  prefixIcon: const Icon(Icons.email, color: Colors.white70),
-
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                  labelStyle: TextStyle(color: Colors.white),
+                  fillColor: Color(0xFF252524),
                   filled: true,
-                  fillColor: cardColor,
-
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide.none,
-                  ),
                 ),
               ),
-
               const SizedBox(height: 15),
-
               TextField(
+                controller: _passwordController,
                 obscureText: true,
-
                 style: const TextStyle(color: Colors.white),
-
-                decoration: InputDecoration(
-                  hintText: 'Password',
-                  hintStyle: const TextStyle(color: Colors.white54),
-
-                  prefixIcon: const Icon(Icons.lock, color: Colors.white70),
-
+                decoration: const InputDecoration(
+                  labelText: 'Password',
+                  labelStyle: TextStyle(color: Colors.white),
+                  fillColor: Color(0xFF252524),
                   filled: true,
-                  fillColor: cardColor,
-
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide.none,
-                  ),
                 ),
               ),
-
               const SizedBox(height: 25),
-
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const MainDashboardScreen(),
+              _isLoading
+                  ? const CircularProgressIndicator(color: Color(0xFFCD0033))
+                  : ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFCD0033),
+                        foregroundColor: Colors.white,
                       ),
-                    );
-                  },
-
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: redColor,
-                    foregroundColor: Colors.white,
-
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      onPressed: _signIn,
+                      child: const Text('Sign In'),
                     ),
-                  ),
-
-                  child: const Text(
-                    'Sign In',
-                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 25),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-
-                children: [
-                  const Text(
-                    "Don't have an account? ",
-                    style: TextStyle(color: Colors.white70),
-                  ),
-
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SignUpScreen(),
-                        ),
-                      );
-                    },
-
-                    child: const Text(
-                      'Sign Up',
-                      style: TextStyle(
-                        color: redColor,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
             ],
           ),
         ),
       ),
     );
   }
-}
+}
