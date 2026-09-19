@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../backend/auth_service.dart';
+import '../journal/journal_screen.dart';
 import 'sign_in_screen.dart';
-
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
@@ -11,8 +11,6 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   late final String name;
   late final String email;
-  final String aboutMe = 'CSE Student';
-  final String journalStarted = 'August 2026';
   final int journalEntries = 0;
 
   @override
@@ -22,6 +20,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     name = user?.displayName ?? 'User';
     email = user?.email ?? '';
   }
+
 
    @override
    Widget build(BuildContext context) {
@@ -86,49 +85,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                  ),
                ],
              ),
-              SizedBox(height: 20),
-             Row(
-               children: [
-                 Text(
-                   'About Me :',
-                   style: TextStyle(
-                     color: Colors.white,
-                     fontSize: 25,
-                     fontWeight: FontWeight.bold,
-                   ),
-                 ),
 
-                 SizedBox(width: 10),
-                 Text(
-                   aboutMe,
-                   style: TextStyle(
-                     color: Colors.white,
-                     fontSize: 25,
-                   ),
-                 ),
-               ],
-             ),
-             const SizedBox(height: 20),
-             Row(
-               children: [
-                 Text(
-                   'Journal Started :',
-                   style: TextStyle(
-                     color: Colors.white,
-                     fontSize: 25,
-                     fontWeight: FontWeight.bold,
-                   ),
-                 ),
-                 SizedBox(width: 10),
-                 Text(
-                   journalStarted,
-                   style: TextStyle(
-                     color: Colors.white,
-                     fontSize: 25,
-                   ),
-                 ),
-               ],
-             ),
              const SizedBox(height: 20),
              Row(
                children: [
@@ -160,9 +117,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                            foregroundColor: Colors.white,
 
                          ),
-                       onPressed:(){
-
-                     },
+                       onPressed: () {
+                         Navigator.push(
+                           context,
+                           MaterialPageRoute(builder: (context) => const JournalScreen()),
+                         );
+                       },
                        child: const  Text('My Journal'),
                      ),
                  ),
@@ -174,14 +134,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                          foregroundColor: Colors.white
                      ),
                      onPressed: () async {
+                       final navigator = Navigator.of(context);
                        await AuthService.instance.signOut();
-                       if (mounted) {
-                         Navigator.pushAndRemoveUntil(
-                           context,
-                           MaterialPageRoute(builder: (context) => const SignInScreen()),
-                           (route) => false,
-                         );
-                       }
+                       if (!mounted) return;
+                       navigator.pushAndRemoveUntil(
+                         MaterialPageRoute(builder: (context) => const SignInScreen()),
+                         (route) => false,
+                       );
                      },
                      child: const Text('Log Out'),
 

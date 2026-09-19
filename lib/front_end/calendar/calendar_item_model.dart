@@ -13,8 +13,8 @@ class CalendarItem {
     required this.id,
     required this.title,
     required this.description,
-    required this.startTime,
-    required this.endTime,
+    this.startTime = const TimeOfDay(hour: 9, minute: 0),
+    this.endTime = const TimeOfDay(hour: 10, minute: 0),
     required this.date,
     this.isEvent = true,
   });

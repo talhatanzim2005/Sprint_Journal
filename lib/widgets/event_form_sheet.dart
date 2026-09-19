@@ -4,12 +4,14 @@ import '../front_end/calendar/calendar_item_model.dart';
 class EventFormSheet extends StatefulWidget {
   final DateTime selectedDay;
   final CalendarItem? existingItem;
+  final bool isTask;
   final void Function(CalendarItem) onSave;
 
   const EventFormSheet({
     super.key,
     required this.selectedDay,
     this.existingItem,
+    this.isTask = false,
     required this.onSave,
   });
 
@@ -17,6 +19,7 @@ class EventFormSheet extends StatefulWidget {
     BuildContext context, {
     required DateTime selectedDay,
     CalendarItem? existingItem,
+    bool isTask = false,
     required void Function(CalendarItem) onSave,
   }) => showModalBottomSheet(
     context: context,
@@ -28,6 +31,7 @@ class EventFormSheet extends StatefulWidget {
     builder: (_) => EventFormSheet(
       selectedDay: selectedDay,
       existingItem: existingItem,
+      isTask: isTask,
       onSave: onSave,
     ),
   );
@@ -39,7 +43,7 @@ class _EventFormSheetState extends State<EventFormSheet> {
   static const Color backgroundColor = Color.fromARGB(255, 27, 27, 26);
   static const Color fontColor = Color.fromARGB(255, 255, 244, 224);
   static const Color accentColor = Color.fromARGB(255, 205, 0, 51);
-  //Form key for validation ??
+
   final _formKey = GlobalKey<FormState>();
   late final _titleCtrl = TextEditingController(
     text: widget.existingItem?.title ?? '',
@@ -47,13 +51,13 @@ class _EventFormSheetState extends State<EventFormSheet> {
   late final _descCtrl = TextEditingController(
     text: widget.existingItem?.description ?? '',
   );
+
   // Default start and end times
   late TimeOfDay _startTime =
-      widget.existingItem?.startTime ?? TimeOfDay(hour: 9, minute: 0);
+      widget.existingItem?.startTime ?? const TimeOfDay(hour: 9, minute: 0);
   late TimeOfDay _endTime =
-      widget.existingItem?.endTime ?? TimeOfDay(hour: 10, minute: 0);
+      widget.existingItem?.endTime ?? const TimeOfDay(hour: 10, minute: 0);
 
-  //dispose to prevent memory leak
   @override
   void dispose() {
     _titleCtrl.dispose();
@@ -71,6 +75,7 @@ class _EventFormSheetState extends State<EventFormSheet> {
       borderSide: BorderSide.none,
     ),
   );
+
   Future<void> _pickTime(bool isStart) async {
     final picked = await showTimePicker(
       context: context,
@@ -102,7 +107,7 @@ class _EventFormSheetState extends State<EventFormSheet> {
         startTime: _startTime,
         endTime: _endTime,
         date: editedItem?.date ?? widget.selectedDay,
-        isEvent: editedItem?.isEvent ?? true,
+        isEvent: editedItem?.isEvent ?? !widget.isTask,
       ),
     );
     Navigator.pop(context);
@@ -125,6 +130,7 @@ class _EventFormSheetState extends State<EventFormSheet> {
       decoration: _decoration(label),
     ),
   );
+
   Widget _buildTimeTile(String label, TimeOfDay time, bool isStart) => Expanded(
     child: ListTile(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -150,77 +156,85 @@ class _EventFormSheetState extends State<EventFormSheet> {
   );
 
   @override
-  Widget build(BuildContext context) => Padding(
-    padding: EdgeInsets.fromLTRB(
-      24,
-      24,
-      24,
-      MediaQuery.of(context).viewInsets.bottom + 24,
-    ),
-    child: Form(
-      key: _formKey,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Drag Handle Pill at the top?
-          Center(
-            child: Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: fontColor.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-          // 2. Sheet Title
-          Text(
-            widget.existingItem != null ? 'Edit Event' : 'Add Event',
-            style: const TextStyle(
-              color: fontColor,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 20),
-          // 3. Title Input (Required)
-          _buildField('Title', _titleCtrl, required: true),
-          // 4. Description Input (2 lines, Optional)
-          _buildField('Description', _descCtrl, lines: 2),
-          // 5. Start Time & End Time Row
-          Row(
-            children: [
-              _buildTimeTile('Start Time', _startTime, true),
-              const SizedBox(width: 12),
-              _buildTimeTile('End', _endTime, false),
-            ],
-          ),
-          const SizedBox(height: 24),
+  Widget build(BuildContext context) {
+    final String sheetTitle = widget.existingItem != null
+        ? (widget.isTask ? 'Edit Task' : 'Edit Event')
+        : (widget.isTask ? 'Add Task' : 'Add Event');
 
-          
-          // 6. Submit Button
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: accentColor,
-              minimumSize: const Size(double.infinity, 48),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+    return Padding(
+      padding: EdgeInsets.fromLTRB(
+        24,
+        24,
+        24,
+        MediaQuery.of(context).viewInsets.bottom + 24,
+      ),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Drag Handle Pill at the top
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: fontColor.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(2),
+                ),
               ),
             ),
-            onPressed: _submit,
-            child: Text(
-              widget.existingItem != null ? 'Save Changes' : 'Create',
+            const SizedBox(height: 16),
+            // Sheet Title
+            Text(
+              sheetTitle,
               style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16,
+                color: fontColor,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
-          ),
-        ],
+            const SizedBox(height: 20),
+            // Title Input (Required)
+            _buildField('Title', _titleCtrl, required: true),
+            // Description Input (2 lines, Optional)
+            _buildField('Description', _descCtrl, lines: 2),
+            // Start Time & End Time Row (Only for events, hidden for tasks)
+            if (!widget.isTask) ...[
+              Row(
+                children: [
+                  _buildTimeTile('Start Time', _startTime, true),
+                  const SizedBox(width: 12),
+                  _buildTimeTile('End', _endTime, false),
+                ],
+              ),
+              const SizedBox(height: 10),
+            ],
+            const SizedBox(height: 14),
+
+            // Submit Button
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: accentColor,
+                minimumSize: const Size(double.infinity, 48),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              onPressed: _submit,
+              child: Text(
+                widget.existingItem != null ? 'Save Changes' : 'Create',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
-    ),
-  );
+    );
+  }
 }

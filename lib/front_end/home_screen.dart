@@ -1,178 +1,64 @@
 import 'package:flutter/material.dart';
-
-class TaskItem {
-  String id;
-  String title;
-  String description;
-
-  TaskItem({required this.id, required this.title, required this.description});
-}
+import 'package:intl/intl.dart';
+import '../widgets/event_form_sheet.dart';
+import 'calendar/calendar_item_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
-  static const Color backgroundColor = Color(0xFF121212);
-  static const Color accentColor = Color(0xFFCD0033);
-  static const Color primaryText = Colors.white;
-  static const Color secondaryText = Colors.white70;
+  static const Color backgroundColor = Color.fromARGB(255, 27, 27, 26);
+  static const Color fontColor = Color.fromARGB(255, 255, 244, 224);
+  static const Color accentColor = Color.fromARGB(255, 205, 0, 51);
+  static const Color cardColor = Color.fromARGB(255, 36, 36, 35);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final List<TaskItem> _tasks = [];
+  final List<CalendarItem> _tasks = [];
 
-  void _deleteTask(TaskItem task) {
+  void _addTask(CalendarItem task) {
+    setState(() {
+      _tasks.add(task);
+    });
+  }
+
+  void _editTask(CalendarItem task) {
+    setState(() {
+      final index = _tasks.indexWhere((t) => t.id == task.id);
+      if (index != -1) {
+        _tasks[index] = task;
+      }
+    });
+  }
+
+  void _deleteTask(CalendarItem task) {
     setState(() {
       _tasks.removeWhere((t) => t.id == task.id);
     });
   }
 
-  void _showTaskForm({TaskItem? task}) {
-    final titleCtrl = TextEditingController(text: task?.title ?? '');
-    final descCtrl = TextEditingController(text: task?.description ?? '');
-    final formKey = GlobalKey<FormState>();
-
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: const Color(0xFF242423),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24.0)),
-      ),
-      builder: (context) {
-        return Padding(
-          padding: EdgeInsets.fromLTRB(
-            24,
-            24,
-            24,
-            MediaQuery.of(context).viewInsets.bottom + 24,
-          ),
-          child: Form(
-            key: formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Container(
-                    width: 40,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: HomeScreen.primaryText.withValues(alpha: 0.2),
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  task != null ? 'Edit Task' : 'Add Task',
-                  style: const TextStyle(
-                    color: HomeScreen.primaryText,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                TextFormField(
-                  controller: titleCtrl,
-                  style: const TextStyle(color: HomeScreen.primaryText),
-                  validator: (v) =>
-                      (v == null || v.trim().isEmpty) ? 'Title is required' : null,
-                  decoration: InputDecoration(
-                    labelText: 'Title',
-                    labelStyle: TextStyle(
-                        color: HomeScreen.primaryText.withValues(alpha: 0.5)),
-                    filled: true,
-                    fillColor: const Color(0xFF1B1B1A),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 14),
-                TextFormField(
-                  controller: descCtrl,
-                  style: const TextStyle(color: HomeScreen.primaryText),
-                  maxLines: 2,
-                  decoration: InputDecoration(
-                    labelText: 'Description',
-                    labelStyle: TextStyle(
-                        color: HomeScreen.primaryText.withValues(alpha: 0.5)),
-                    filled: true,
-                    fillColor: const Color(0xFF1B1B1A),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 24),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: HomeScreen.accentColor,
-                    minimumSize: const Size(double.infinity, 48),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  onPressed: () {
-                    if (!formKey.currentState!.validate()) return;
-
-                    setState(() {
-                      if (task == null) {
-                        _tasks.add(
-                          TaskItem(
-                            id: DateTime.now().microsecondsSinceEpoch.toString(),
-                            title: titleCtrl.text.trim(),
-                            description: descCtrl.text.trim(),
-                          ),
-                        );
-                      } else {
-                        task.title = titleCtrl.text.trim();
-                        task.description = descCtrl.text.trim();
-                      }
-                    });
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    task != null ? 'Save Changes' : 'Create',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: HomeScreen.backgroundColor,
-      width: double.infinity,
-      child: SafeArea(
+    final now = DateTime.now();
+    final dateHeader = DateFormat('EEE, MMM d').format(now);
+
+    return Scaffold(
+      backgroundColor: HomeScreen.backgroundColor,
+      body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(20, 20, 20, 30),
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 80),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // =========================
               // GREETING
               // =========================
-
               const Text(
                 "Good Morning,",
                 style: TextStyle(
-                  color: HomeScreen.primaryText,
+                  color: HomeScreen.fontColor,
                   fontSize: 24,
                   fontWeight: FontWeight.w500,
                 ),
@@ -191,94 +77,117 @@ class _HomeScreenState extends State<HomeScreen> {
 
               const SizedBox(height: 5),
 
-              const Text(
+              Text(
                 "Let's make today productive.",
                 style: TextStyle(
-                  color: HomeScreen.secondaryText,
+                  color: HomeScreen.fontColor.withValues(alpha: 0.7),
                   fontSize: 15,
                 ),
               ),
 
-              const SizedBox(height: 35),
+              const SizedBox(height: 25),
 
               // =========================
-              // TODAY'S FOCUS
+              // TASK HEADER
               // =========================
-
-              const Text(
-                "Today's Focus",
-                style: TextStyle(
-                  color: HomeScreen.primaryText,
-                  fontSize: 21,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-
-              const SizedBox(height: 12),
-
-              _buildProgressCard(),
-
-              const SizedBox(height: 35),
-
-              // =========================
-              // TASKS
-              // =========================
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    "Tasks",
-                    style: TextStyle(
-                      color: HomeScreen.primaryText,
-                      fontSize: 21,
-                      fontWeight: FontWeight.bold,
+                  Text(
+                    'Task for $dateHeader',
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: HomeScreen.fontColor,
                     ),
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.add, color: HomeScreen.accentColor),
-                    onPressed: () => _showTaskForm(),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: HomeScreen.accentColor.withValues(alpha: .2),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      '${_tasks.length} Tasks',
+                      style: const TextStyle(
+                        color: HomeScreen.accentColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                    ),
                   ),
                 ],
               ),
 
-              const SizedBox(height: 12),
+              const SizedBox(height: 16),
 
-              ..._tasks.map((task) => _buildTaskItem(task)),
-
+              // =========================
+              // TASK LIST
+              // =========================
               if (_tasks.isEmpty)
                 Center(
                   child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Text(
-                      "No tasks yet. Tap + to add one.",
-                      style: TextStyle(
-                        color: HomeScreen.secondaryText.withValues(alpha: 0.5),
-                      ),
+                    padding: const EdgeInsets.symmetric(vertical: 60.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.event_available,
+                          size: 44,
+                          color: HomeScreen.fontColor,
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          'No Tasks for $dateHeader',
+                          style: TextStyle(
+                            color: HomeScreen.fontColor.withValues(alpha: .3),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
+                )
+              else
+                ..._tasks.map((task) => _buildTaskItem(task)),
             ],
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: HomeScreen.accentColor,
+        elevation: 6,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
+        onPressed: () {
+          EventFormSheet.show(
+            context,
+            selectedDay: now,
+            isTask: true,
+            onSave: _addTask,
+          );
+        },
+        child: const Icon(Icons.add, color: Colors.white, size: 32),
+      ),
     );
   }
 
-  Widget _buildTaskItem(TaskItem task) {
+  Widget _buildTaskItem(CalendarItem task) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFF1B1B1A),
+        color: HomeScreen.backgroundColor,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: HomeScreen.primaryText.withValues(alpha: 0.1),
+          color: HomeScreen.fontColor.withValues(alpha: .2),
           width: 1,
         ),
       ),
       child: Row(
         children: [
+          // Red dot indicator
           Container(
             width: 12,
             height: 12,
@@ -288,6 +197,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           const SizedBox(width: 12),
+
+          // Title and Description
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -295,7 +206,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Text(
                   task.title,
                   style: const TextStyle(
-                    color: HomeScreen.primaryText,
+                    color: HomeScreen.fontColor,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
@@ -306,21 +217,33 @@ class _HomeScreenState extends State<HomeScreen> {
                     task.description,
                     style: TextStyle(
                       fontSize: 12,
-                      color: HomeScreen.primaryText.withValues(alpha: .6),
+                      color: HomeScreen.fontColor.withValues(alpha: .6),
                     ),
                   ),
                 ],
               ],
             ),
           ),
+
+          // Edit button
           IconButton(
             icon: const Icon(
               Icons.edit_outlined,
-              size: 16,
+              size: 18,
               color: HomeScreen.accentColor,
             ),
-            onPressed: () => _showTaskForm(task: task),
+            onPressed: () {
+              EventFormSheet.show(
+                context,
+                selectedDay: task.date,
+                existingItem: task,
+                isTask: true,
+                onSave: _editTask,
+              );
+            },
           ),
+
+          // Delete button
           IconButton(
             icon: const Icon(
               Icons.delete_outline,
@@ -328,128 +251,6 @@ class _HomeScreenState extends State<HomeScreen> {
               color: HomeScreen.accentColor,
             ),
             onPressed: () => _deleteTask(task),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // =========================================================
-  // PROGRESS CARD
-  // =========================================================
-
-  Widget _buildProgressCard() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: HomeScreen.accentColor,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-
-          // Icon + Title
-          Row(
-            children: const [
-              Icon(
-                Icons.track_changes,
-                color: Colors.white,
-                size: 28,
-              ),
-
-              SizedBox(width: 12),
-
-              Text(
-                "Today's Progress",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 19,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 25),
-
-          // Progress number
-          const Text(
-            "3 / 5",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 42,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-
-          const SizedBox(height: 2),
-
-          const Text(
-            "Tasks Completed",
-            style: TextStyle(
-              color: Colors.white70,
-              fontSize: 15,
-            ),
-          ),
-
-          const SizedBox(height: 20),
-
-          // Progress bar
-          Row(
-            children: [
-
-              Expanded(
-                child: Container(
-                  height: 9,
-                  decoration: BoxDecoration(
-                    color: Colors.white30,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Row(
-                    children: [
-
-                      Expanded(
-                        flex: 3,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                      ),
-
-                      const Expanded(
-                        flex: 2,
-                        child: SizedBox(),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-
-              const SizedBox(width: 12),
-
-              const Text(
-                "60%",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 20),
-
-          const Text(
-            "Small steps create big results.",
-            style: TextStyle(
-              color: Colors.white70,
-              fontSize: 14,
-            ),
           ),
         ],
       ),
