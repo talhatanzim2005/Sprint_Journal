@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'user_service.dart';
 
 /// Simplified Authentication Service for SprintJournal.
 /// Encapsulates Email/Password and Google Authentication.
@@ -40,7 +41,7 @@ class AuthService {
     }
   }
 
-  /// Sign up with Email and Password (optional display name).
+  /// Sign up with Email and Password (optional display name / username).
   Future<UserCredential> signUpWithEmailPassword({
     required String email,
     required String password,
@@ -51,9 +52,21 @@ class AuthService {
         email: email.trim(),
         password: password,
       );
+      final user = credential.user;
+      final username = name?.trim() ?? email.split('@').first;
+
       if (name != null && name.trim().isNotEmpty) {
-        await credential.user?.updateDisplayName(name.trim());
+        await user?.updateDisplayName(name.trim());
       }
+
+      if (user != null) {
+        await UserService.instance.saveUserProfile(
+          uid: user.uid,
+          username: username,
+          email: user.email ?? email.trim(),
+        );
+      }
+
       return credential;
     } on FirebaseAuthException catch (e) {
       throw _handleAuthError(e);
@@ -73,7 +86,18 @@ class AuthService {
         idToken: googleAuth.idToken,
       );
 
-      return await _auth.signInWithCredential(credential);
+      final userCredential = await _auth.signInWithCredential(credential);
+      final user = userCredential.user;
+
+      if (user != null) {
+        await UserService.instance.saveUserProfile(
+          uid: user.uid,
+          username: user.displayName ?? user.email?.split('@').first ?? 'User',
+          email: user.email ?? '',
+        );
+      }
+
+      return userCredential;
     } on FirebaseAuthException catch (e) {
       throw _handleAuthError(e);
     } catch (e) {
