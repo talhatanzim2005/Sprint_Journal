@@ -97,6 +97,7 @@ class _JournalScreenState extends State<JournalScreen> {
               // Journal Box Card
               Container(
                 padding: const EdgeInsets.all(16),
+                
                 decoration: BoxDecoration(
                   color: cardColor,
                   borderRadius: BorderRadius.circular(16),
@@ -143,12 +144,12 @@ class _JournalScreenState extends State<JournalScreen> {
                     ),
                     const SizedBox(height: 12),
 
-                    // Description Input (max 306 chars, fixed height)
+                    // Description Input (max 306 chars, flexible lines)
                     TextField(
                       controller: _descController,
-                      maxLength: 306,
-                      maxLines: 10,
-                      minLines: 10,
+                      maxLength: 246,
+                      maxLines: 7,
+                      minLines: 7,
                       maxLengthEnforcement: MaxLengthEnforcement.enforced,
                       onChanged: (_) {
                         _saveTodayEntry();

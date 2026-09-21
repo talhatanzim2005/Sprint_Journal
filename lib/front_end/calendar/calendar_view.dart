@@ -74,7 +74,7 @@ class CalendarView extends StatelessWidget {
         startingDayOfWeek: StartingDayOfWeek.saturday,
 
         headerStyle: HeaderStyle(
-          formatButtonVisible: true,
+          formatButtonVisible: false,
           titleCentered: true,
           titleTextFormatter: (date, locale) {
             final month = [
