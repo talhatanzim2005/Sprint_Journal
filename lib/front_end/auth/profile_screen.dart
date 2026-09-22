@@ -2,24 +2,21 @@ import 'package:flutter/material.dart';
 import '../../backend/auth_service.dart';
 import '../journal/journal_screen.dart';
 import 'sign_in_screen.dart';
+
+
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
-class _ProfileScreenState extends State<ProfileScreen> {
-  late final String name;
-  late final String email;
-  final int journalEntries = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    final user = AuthService.instance.currentUser;
-    name = user?.displayName ?? 'User';
-    email = user?.email ?? '';
-  }
+ class _ProfileScreenState extends State<ProfileScreen>
+ {
+   String name='Rabeta Zannat';
+   String email='rabeta@gmail.com';
+   String aboutMe='CSE Student';
+   String journalStarted = 'August 2026';
+   int journalEntries = 0;
 
 
    @override
@@ -41,7 +38,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
              ),
        ),
 
-       body: Padding(
+       body: SingleChildScrollView(
          padding: const EdgeInsets.all(20),
          child: Column(
            crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,7 +82,49 @@ class _ProfileScreenState extends State<ProfileScreen> {
                  ),
                ],
              ),
+              SizedBox(height: 20),
+             Row(
+               children: [
+                 Text(
+                   'About Me :',
+                   style: TextStyle(
+                     color: Colors.white,
+                     fontSize: 25,
+                     fontWeight: FontWeight.bold,
+                   ),
+                 ),
 
+                 SizedBox(width: 10),
+                 Text(
+                   aboutMe,
+                   style: TextStyle(
+                     color: Colors.white,
+                     fontSize: 25,
+                   ),
+                 ),
+               ],
+             ),
+             const SizedBox(height: 20),
+             Row(
+               children: [
+                 Text(
+                   'Journal Started :',
+                   style: TextStyle(
+                     color: Colors.white,
+                     fontSize: 25,
+                     fontWeight: FontWeight.bold,
+                   ),
+                 ),
+                 SizedBox(width: 10),
+                 Text(
+                   journalStarted,
+                   style: TextStyle(
+                     color: Colors.white,
+                     fontSize: 25,
+                   ),
+                 ),
+               ],
+             ),
              const SizedBox(height: 20),
              Row(
                children: [
@@ -107,44 +146,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                  ),
                ],
              ),
-             const SizedBox(height:450),
-             Row(
+             const SizedBox(height: 40),
+             Column(
+               crossAxisAlignment: CrossAxisAlignment.stretch,
                children: [
-                 Expanded(
-                     child: ElevatedButton(
-                         style:ElevatedButton.styleFrom(
-                           backgroundColor: const Color(0xFFDC143C),
-                           foregroundColor: Colors.white,
-
-                         ),
-                       onPressed: () {
-                         Navigator.push(
-                           context,
-                           MaterialPageRoute(builder: (context) => const JournalScreen()),
-                         );
-                       },
-                       child: const  Text('My Journal'),
-                     ),
-                 ),
-                 SizedBox(width: 60),
-                 Expanded(
-                   child: ElevatedButton(
-                     style:ElevatedButton.styleFrom(
-                         backgroundColor:const Color(0xFFDC143C),
-                         foregroundColor: Colors.white
-                     ),
-                     onPressed: () async {
-                       final navigator = Navigator.of(context);
-                       await AuthService.instance.signOut();
-                       if (!mounted) return;
-                       navigator.pushAndRemoveUntil(
-                         MaterialPageRoute(builder: (context) => const SignInScreen()),
-                         (route) => false,
-                       );
-                     },
-                     child: const Text('Log Out'),
-
+                 ElevatedButton(
+                   style: ElevatedButton.styleFrom(
+                     backgroundColor: const Color(0xFFDC143C),
+                     foregroundColor: Colors.white,
                    ),
+                   onPressed: () {},
+                   child: const Text('My Journal'),
+                 ),
+                 const SizedBox(height: 15),
+                 ElevatedButton(
+                   style: ElevatedButton.styleFrom(
+                     backgroundColor: const Color(0xFFDC143C),
+                     foregroundColor: Colors.white,
+                   ),
+                   onPressed: () {},
+                   child: const Text('Log Out'),
                  ),
                ],
              ),
