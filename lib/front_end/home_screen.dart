@@ -52,9 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // =========================
-              // GREETING
-              // =========================
+              // Greeting
               const Text(
                 "Good Morning,",
                 style: TextStyle(
@@ -67,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 3),
 
               const Text(
-                "Reshad 👋",
+                "Mr.Talha",
                 style: TextStyle(
                   color: HomeScreen.accentColor,
                   fontSize: 32,
@@ -87,9 +85,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
               const SizedBox(height: 25),
 
-              // =========================
-              // TASK HEADER
-              // =========================
+
+
+
+              // Task Header
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -104,8 +103,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                     decoration: BoxDecoration(
-                      color: HomeScreen.accentColor.withValues(alpha: .2),
-                      borderRadius: BorderRadius.circular(12),
+                      color: HomeScreen.accentColor.withValues(alpha: .15),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     child: Text(
                       '${_tasks.length} Tasks',
@@ -121,9 +120,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
               const SizedBox(height: 16),
 
-              // =========================
-              // TASK LIST
-              // =========================
+
+
+
+              // task list
               if (_tasks.isEmpty)
                 Center(
                   child: Padding(
