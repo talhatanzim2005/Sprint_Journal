@@ -11,20 +11,20 @@ class OneTimeSplashScreen extends StatefulWidget {
 
 class _OneTimeSplashScreenState extends State<OneTimeSplashScreen> {
   @override
-  void initState() {
+  void initState(){
     super.initState();
-
+    
     Timer(
       const Duration(seconds: 3),
         (){
-        if(!mounted) return;
+        if(!mounted)return;
 
         Navigator.pushReplacement(context,
-            MaterialPageRoute(
-              builder: (context) => const SignInScreen(),
-            ),
-          );
-        },
+          MaterialPageRoute(
+              builder: (context) => SignInScreen(),
+        ),
+       );
+     },
     );
   }
   @override
@@ -34,7 +34,7 @@ class _OneTimeSplashScreenState extends State<OneTimeSplashScreen> {
 
       body: Center(
         child: Image.asset(
-            'assest/images/logo.jpg',
+          'assest/images/logo.jpg',
           height: 160,
           width: 160,
 
