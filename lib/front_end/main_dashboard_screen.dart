@@ -4,7 +4,7 @@ import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_nav_bar.dart';
 import '../widgets/swipe_anim.dart';
 import 'home_screen.dart';
-import 'progress_tracker/progress_tracker_screen.dart';
+import 'progress_tracker.dart';
 import 'journal/journal_screen.dart';
 import 'timer_screen.dart';
 import 'calendar/calendar_screen.dart';
