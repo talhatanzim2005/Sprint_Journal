@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../backend/user_service.dart';
 import '../widgets/event_form_sheet.dart';
 import 'calendar/calendar_item_model.dart';
 
@@ -64,9 +65,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
               const SizedBox(height: 3),
 
-              const Text(
-                "Mr.Talha",
-                style: TextStyle(
+              Text(
+                UserService.instance.firstName,
+                style: const TextStyle(
                   color: HomeScreen.accentColor,
                   fontSize: 32,
                   fontWeight: FontWeight.bold,

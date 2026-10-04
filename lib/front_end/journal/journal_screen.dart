@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'journal_entry_model.dart';
+import 'journal_service.dart';
 
 class JournalScreen extends StatefulWidget {
   const JournalScreen({super.key});
@@ -8,7 +10,8 @@ class JournalScreen extends StatefulWidget {
   State<JournalScreen> createState() => _JournalScreenState();
 }
 
-class _JournalScreenState extends State<JournalScreen> {
+class _JournalScreenState extends State<JournalScreen>
+    with AutomaticKeepAliveClientMixin {
   static const Color backgroundColor = Color.fromARGB(255, 27, 27, 26);
   static const Color fontColor = Color.fromARGB(255, 255, 244, 224);
   static const Color accentColor = Color.fromARGB(255, 205, 0, 51);
@@ -17,10 +20,23 @@ class _JournalScreenState extends State<JournalScreen> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
 
-  _DailyJournal get todayEntry => _DailyJournal(
-        title: _titleController.text.trim(),
-        description: _descController.text.trim(),
-      );
+  String? _currentEntryId;
+  DateTime? _currentCreatedAt;
+
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+    if (JournalService.instance.entries.isNotEmpty) {
+      final latest = JournalService.instance.entries.first;
+      _currentEntryId = latest.id;
+      _currentCreatedAt = latest.createdAt;
+      _titleController.text = latest.title;
+      _descController.text = latest.description;
+    }
+  }
 
   @override
   void dispose() {
@@ -29,12 +45,69 @@ class _JournalScreenState extends State<JournalScreen> {
     super.dispose();
   }
 
-  void _saveTodayEntry() {
-    // Save entry logic / persist state
+  /// Save or update the current title + description as a journal entry.
+  /// The written text is retained on the screen and not removed.
+  void _saveJournalEntry() {
+    final title = _titleController.text.trim();
+    final description = _descController.text.trim();
+
+    if (title.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Please add a title before saving.'),
+          backgroundColor: accentColor,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+      return;
+    }
+
+    if (_currentEntryId != null) {
+      // Update existing entry
+      JournalService.instance.editEntry(
+        JournalEntry(
+          id: _currentEntryId!,
+          title: title,
+          description: description,
+          createdAt: _currentCreatedAt ?? DateTime.now(),
+        ),
+      );
+    } else {
+      // Create new entry
+      final id = DateTime.now().microsecondsSinceEpoch.toString();
+      _currentEntryId = id;
+      _currentCreatedAt = DateTime.now();
+      JournalService.instance.addEntry(
+        JournalEntry(
+          id: id,
+          title: title,
+          description: description,
+          createdAt: _currentCreatedAt!,
+        ),
+      );
+    }
+
+    // Keep the written text in _titleController and _descController (do not clear)
+    setState(() {});
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text('Journal saved!'),
+        backgroundColor: const Color(0xFF2E7D32),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final now = DateTime.now();
     final dateDisplay = '${now.day}/${now.month}/${now.year}';
 
@@ -118,7 +191,6 @@ class _JournalScreenState extends State<JournalScreen> {
                     // Title Input
                     TextField(
                       controller: _titleController,
-                      onChanged: (_) => _saveTodayEntry(),
                       style: const TextStyle(
                         color: fontColor,
                         fontSize: 18,
@@ -144,7 +216,7 @@ class _JournalScreenState extends State<JournalScreen> {
                     ),
                     const SizedBox(height: 12),
 
-                    // Description Input (max 306 chars, flexible lines)
+                    // Description Input (max 246 chars, flexible lines)
                     TextField(
                       controller: _descController,
                       maxLength: 246,
@@ -152,7 +224,6 @@ class _JournalScreenState extends State<JournalScreen> {
                       minLines: 7,
                       maxLengthEnforcement: MaxLengthEnforcement.enforced,
                       onChanged: (_) {
-                        _saveTodayEntry();
                         setState(() {}); // refresh counter UI if needed
                       },
                       style: const TextStyle(
@@ -180,16 +251,16 @@ class _JournalScreenState extends State<JournalScreen> {
           ),
         ),
       ),
+      // + button to save the journal entry
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: accentColor,
+        elevation: 6,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
+        onPressed: _saveJournalEntry,
+        child: const Icon(Icons.add, color: Colors.white, size: 32),
+      ),
     );
   }
-}
-
-class _DailyJournal {
-  final String title;
-  final String description;
-
-  const _DailyJournal({
-    required this.title,
-    required this.description,
-  });
 }

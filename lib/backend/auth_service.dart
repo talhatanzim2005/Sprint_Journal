@@ -21,7 +21,14 @@ class AuthService {
   }
 
   // 3. Sign Up & Save to Firestore
-  Future<UserCredential> signUp(String email, String password, String username) async {
+  Future<UserCredential> signUp(
+    String email,
+    String password,
+    String username, {
+    String? firstName,
+    String? lastName,
+    String? journalStarted,
+  }) async {
     UserCredential cred = await _auth.createUserWithEmailAndPassword(
       email: email.trim(),
       password: password,
@@ -33,6 +40,9 @@ class AuthService {
         uid: cred.user!.uid,
         username: username,
         email: email,
+        firstName: firstName,
+        lastName: lastName,
+        journalStarted: journalStarted,
       );
     }
     return cred;
